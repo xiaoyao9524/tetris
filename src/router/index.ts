@@ -9,6 +9,10 @@ const routes = [
     path: '/about',
     component: () => import('@/views/About')
   },
+  {
+    path: '/game',
+    component: () => import('@/views/Game')
+  },
 ]
 
 const router = createRouter({

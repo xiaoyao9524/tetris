@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import { ref, computed } from "vue";
 import MyList from "@/components/List.vue";
 import Foo from '@/components/Foo.vue';
 import Bar from '@/components/Bar.vue';
 import Baz from '@/components/Baz.vue';
+
+const router = useRouter();
 
 const count = ref(0);
 
@@ -18,6 +21,10 @@ const RenderComponent = computed(() => {
       return Baz;
   }
 })
+
+const startGame = () => {
+  router.push('/game')
+}
 </script>
 
 <template>
@@ -28,6 +35,8 @@ const RenderComponent = computed(() => {
       @click="count++"
     >count is: {{ count }}</button>
     <component :is="RenderComponent" />
+
+    <button @click="startGame">开始游戏</button>
   </div>
 </template>
 
