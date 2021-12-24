@@ -11,14 +11,14 @@ import {
 } from './GridType';
 
 /**
- * 类型1
+ * 类型2
  *     **
- *     **
+ *      **
  */
 
 /**
  * 初始位置：
- * [* * * * 0 0 * * * *]
+ * [* * * 0 0 * * * * *]
  * [* * * * 0 0 * * * *]
  */
 
@@ -27,17 +27,13 @@ class GridType1 extends FallGrid{
     super();
   }
   // 当前坐标
-  x: number = 4;
+  x: number = 3;
   y: number = 0;
 
   checkToNextLine (gameStatus: GameStatus): boolean {
-    // 检查下方有无阻挡
-    const { x, y } = this;
 
-    const checkPoint1 = gameStatus[x][y + 2];
-    const checkPoint2 = gameStatus[x + 1][y + 2];
-
-    return ![checkPoint1, checkPoint2].includes(1);
+    
+    return true
   }
   
   /**
@@ -53,14 +49,10 @@ class GridType1 extends FallGrid{
     return this.x < gameWidth;
   }
 
-  toNextLine (): GridPoint[] | null {
-    if (this.checkToNextLine()) {
-      this.y++;
+  toNextLine (): GridPoint[] {
+    this.y++;
 
-      return this.getCurrentPosition();
-    }
-
-    return null;
+    return this.getCurrentPosition();
   }
 
   toLeft (): GridPoint[] {

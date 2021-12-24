@@ -8,11 +8,13 @@ export interface GridProps {
 }
 
 // 每个格子类要有的属性
-export abstract class BaseGrid {
+export abstract class FallGrid {
   abstract x: number;
   abstract y: number;
 
-  abstract checkNextLine(gameStatus: GameStatus): boolean;
+  abstract checkToNextLine(gameStatus: GameStatus): boolean;
+  abstract checkToLeft(): boolean;
+  abstract checkToRight(gameStatus: GameStatus): boolean;
   abstract toNextLine(): GridPoint[];
   abstract toLeft(): GridPoint[];
   abstract toRight(): GridPoint[];

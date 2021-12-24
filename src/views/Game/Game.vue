@@ -17,14 +17,25 @@
 </template>
 
 <script setup lang="ts">
+import { ref, reactive } from "vue";
+import{integer, nativeMath} from 'random-js'
+// util
+import {
+  createGameStatus,
+  createFallElement
+} from './utils/gameUtils';
+
+// type
 import type {
   GameStatus
 } from './types';
-import { ref } from "vue";
+import type {
+  GridPoint
+} from './utils/grid/GridType';
 
-import {
-  createGameStatus
-} from './utils/gameUtils';
+import { FallGrid } from './utils/grid/GridType';
+
+
 // 游戏状态
 const gameStatus = ref<GameStatus>([]);
 
@@ -32,7 +43,28 @@ const gameStatus = ref<GameStatus>([]);
 const rowCount = ref(20);
 const colCount = ref(10);
 
+// 下落间隔(ms)
+const fallInterval = ref(1000);
+
 gameStatus.value = createGameStatus(rowCount.value, colCount.value);
+
+
+/*
+const obj = reactive<{
+  [key: number]: number;
+}>({})
+for (let i =0; i < 100; i++) {
+  const num = integer(0, 5)(nativeMath);
+
+  if (obj[num]) {
+    obj[num]++
+  } else {
+    obj[num] = 1
+  }
+}
+
+console.log('random: ', obj)
+*/
 
 /**
  * 当前下落的格子：
@@ -51,6 +83,24 @@ gameStatus.value = createGameStatus(rowCount.value, colCount.value);
  *         *
  *        ***
  */
+
+  // 保存之前下落元素坐标
+  const fallElBeforePoint = ref<GridPoint[]>([]);
+  // 创建下落元素
+  const fallEl = ref<FallGrid>(createFallElement());
+
+  // 开始下落
+  // const toNextLineTimer = ref<NodeJS.Timeout | null>(null)
+
+  // 每次下落时触发
+  const handlerFallMoment = () => {
+    fallEl.value.toNextLine
+  }
+
+  handlerFallMoment();
+
+  // toNextLineTimer.value = setTimeout(handlerFallMoment, fallInterval.value)
+  
 </script>
 
 <style scoped lang="scss">

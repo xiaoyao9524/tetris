@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "node-sass": "^7.0.0",
+    "random-js": "^2.1.0",
     "sass": "^1.45.1",
     "sass-loader": "^12.4.0",
     "vue": "^3.2.22",
