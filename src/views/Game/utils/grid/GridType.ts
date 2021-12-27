@@ -13,11 +13,11 @@ export abstract class FallGrid {
   abstract y: number;
 
   abstract checkToNextLine(gameStatus: GameStatus): boolean;
-  abstract checkToLeft(): boolean;
+  abstract checkToLeft(gameStatus: GameStatus): boolean;
   abstract checkToRight(gameStatus: GameStatus): boolean;
-  abstract toNextLine(): GridPoint[];
-  abstract toLeft(): GridPoint[];
-  abstract toRight(): GridPoint[];
+  abstract toNextLine(gameStatus: GameStatus): GridPoint[] | null;
+  abstract toLeft(gameStatus: GameStatus): GridPoint[] | null;
+  abstract toRight(gameStatus: GameStatus): GridPoint[] | null;
   abstract getCurrentPosition(): GridPoint[];
 }
 

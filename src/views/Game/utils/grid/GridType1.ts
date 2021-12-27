@@ -17,9 +17,11 @@ import {
  */
 
 /**
- * 初始位置：
+ * 初始位置(4, 0)：
  * [* * * * 0 0 * * * *]
  * [* * * * 0 0 * * * *]
+ * [* * * * * * * * * *]
+ * [* * * * * * * * * *]
  */
 
 class GridType1 extends FallGrid{
@@ -30,31 +32,29 @@ class GridType1 extends FallGrid{
   x: number = 4;
   y: number = 0;
 
+  /** 向下 */
   checkToNextLine (gameStatus: GameStatus): boolean {
-    // 检查下方有无阻挡
+    // 检查是否可以下落
     const { x, y } = this;
 
-    const checkPoint1 = gameStatus[x][y + 2];
-    const checkPoint2 = gameStatus[x + 1][y + 2];
+    // 检查是否已到最后一行
+    const isLastRow = y + 1 >= gameStatus.length - 1;
+
+    if (isLastRow) {
+      return false;
+    }
+
+    const checkPoint1 = gameStatus[y + 2][x];
+    const checkPoint2 = gameStatus[y + 2][x + 1];
+
+    console.log('checkPoint1: ', checkPoint1);
+    console.log('checkPoint2: ', checkPoint2)
 
     return ![checkPoint1, checkPoint2].includes(1);
   }
-  
-  /**
-   * 检查左右其实也不能这么简单，还需要判断当前块左右是否有其他块挡着
-   */
-  checkToLeft (): boolean {
-    return this.x > 0;
-  }
 
-  checkToRight (gameStatus: GameStatus): boolean {
-    const gameWidth = gameStatus[0].length;
-
-    return this.x < gameWidth;
-  }
-
-  toNextLine (): GridPoint[] | null {
-    if (this.checkToNextLine()) {
+  toNextLine (gameStatus: GameStatus): GridPoint[] | null {
+    if (this.checkToNextLine(gameStatus)) {
       this.y++;
 
       return this.getCurrentPosition();
@@ -62,19 +62,50 @@ class GridType1 extends FallGrid{
 
     return null;
   }
+  
+  
+  /** 向左移动 */
+  //  检查左右其实也不能这么简单，还需要判断当前块左右是否有其他块挡着
+  checkToLeft (gameStatus: GameStatus): boolean {
+    const { x, y } = this;
+    // 首先检查是否已经在最左边了
+    const isLeftmost = x === 0;
+    if (isLeftmost) {
+      return false;
+    }
+    
+    // 检查左边有无物体
+    const checkPoint1 = gameStatus[y][x - 1];
+    const checkPoint2 = gameStatus[y + 1][x - 1];
 
-  toLeft (): GridPoint[] {
+    return ![checkPoint1, checkPoint2].includes(1);
+  }
+
+  toLeft (gameStatus: GameStatus): GridPoint[] | null {
+    const isAllowToLeft = this.checkToLeft(gameStatus);
+    if (!isAllowToLeft) {
+      return null;
+    }
+    
     this.x--;
 
     return this.getCurrentPosition();
   }
 
-  toRight (): GridPoint[] {
+  /** 向右移动 */
+  checkToRight (gameStatus: GameStatus): boolean {
+    const gameWidth = gameStatus[0].length;
+
+    return this.x < gameWidth;
+  }
+
+  toRight (gameStatus: GameStatus): GridPoint[] {
     this.x++;
 
     return this.getCurrentPosition();
   }
 
+  // 获取当前各点坐标
   getCurrentPosition (): GridPoint[] {
     const {x, y} = this;
     const point1: GridPoint = {
