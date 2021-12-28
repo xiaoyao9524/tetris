@@ -21,7 +21,7 @@ const rowCount = ref(20);
 const colCount = ref(10);
 
 // 下落间隔(ms)
-const fallInterval = ref(200);
+const fallInterval = ref(400);
 
 // 初始化游戏状态
 gameStatus.value = createGameStatus(rowCount.value, colCount.value);
@@ -162,7 +162,7 @@ const handlerFallMoment = () => {
 };
 
 // 开始下落
-// setTimeout(handlerFallMoment, fallInterval.value);
+setTimeout(handlerFallMoment, fallInterval.value);
 
 // 向左
 const handlerToLeft = () => {
@@ -238,21 +238,19 @@ const handlerToRight = () => {
         <div>
           <button @click="lookGameStatus">查看游戏状态</button>
           <button @click="handlerFallMoment">下落一行</button>
-          <button @click="handlerToLeft">向左</button>
-          <button @click="handlerToRight">向右</button>
         </div>
       </div>
     </div>
 
     <div class="operation-container">
-      <div class="operation-item">
+      <div class="operation-item" @click="handlerToLeft">
         <span class="icon-font">&#xe84b;</span>
       </div>
       <div class="operation-item">
         <span class="icon-font">&#xe7e7;</span>
       </div>
       <div class="operation-item">
-        <span class="icon-font">&#xe84a;</span>
+        <span class="icon-font" @click="handlerToRight">&#xe84a;</span>
       </div>
     </div>
   </div>
