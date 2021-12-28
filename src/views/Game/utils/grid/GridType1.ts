@@ -18,19 +18,33 @@ import {
 
 /**
  * 初始位置(4, 0)：
- * [* * * * 0 0 * * * *]
- * [* * * * 0 0 * * * *]
- * [* * * * * * * * * *]
- * [* * * * * * * * * *]
+ *     0 1 2 3 4 5 6 7 8 9
+ * 0、[* * * * 0 0 * * * *]
+ * 1、[* * * * 0 0 * * * *]
+ * 2、[* * * * * * * * * *]
+ * 3、[* * * * * * * * * *]
  */
 
 class GridType1 extends FallGrid{
-  constructor () {
-    super();
-  }
+  // constructor () {
+  //   super();
+  // }
+
   // 当前坐标
   x: number = 4;
   y: number = 0;
+
+  /** 检查是否生成成功 */
+  checkCreateSuccess (gameStatus: GameStatus): boolean {
+    const { x, y } = this;
+
+    const checkPoint1 = gameStatus[y][x];
+    const checkPoint2 = gameStatus[y][x + 1];
+    const checkPoint3 = gameStatus[y + 1][x];
+    const checkPoint4 = gameStatus[y + 1][x + 1];
+
+    return ![checkPoint1, checkPoint2, checkPoint3, checkPoint4].includes(1);
+  }
 
   /** 向下 */
   checkToNextLine (gameStatus: GameStatus): boolean {
@@ -47,9 +61,6 @@ class GridType1 extends FallGrid{
     const checkPoint1 = gameStatus[y + 2][x];
     const checkPoint2 = gameStatus[y + 2][x + 1];
 
-    console.log('checkPoint1: ', checkPoint1);
-    console.log('checkPoint2: ', checkPoint2)
-
     return ![checkPoint1, checkPoint2].includes(1);
   }
 
@@ -62,7 +73,6 @@ class GridType1 extends FallGrid{
 
     return null;
   }
-  
   
   /** 向左移动 */
   //  检查左右其实也不能这么简单，还需要判断当前块左右是否有其他块挡着
@@ -94,12 +104,29 @@ class GridType1 extends FallGrid{
 
   /** 向右移动 */
   checkToRight (gameStatus: GameStatus): boolean {
+    const { x, y } = this;
+    // 首先检查是否已经在最右侧了
     const gameWidth = gameStatus[0].length;
 
-    return this.x < gameWidth;
+    const isRightmost = x >= gameWidth - 2;
+
+    if (isRightmost) {
+      return false;
+    }
+
+    // 检查右侧是否有物体
+    const checkPoint1 = gameStatus[y][x + 2];
+    const checkPoint2 = gameStatus[y + 1][x + 2];
+
+    return ![checkPoint1, checkPoint2].includes(1);
   }
 
-  toRight (gameStatus: GameStatus): GridPoint[] {
+  toRight (gameStatus: GameStatus): GridPoint[] | null {
+    const isAllowToRight = this.checkToRight(gameStatus);
+
+    if (!isAllowToRight) {
+      return null;
+    }
     this.x++;
 
     return this.getCurrentPosition();

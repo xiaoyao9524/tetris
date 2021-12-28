@@ -12,6 +12,7 @@ export abstract class FallGrid {
   abstract x: number;
   abstract y: number;
 
+  abstract checkCreateSuccess(gameStatus: GameStatus): boolean;
   abstract checkToNextLine(gameStatus: GameStatus): boolean;
   abstract checkToLeft(gameStatus: GameStatus): boolean;
   abstract checkToRight(gameStatus: GameStatus): boolean;
