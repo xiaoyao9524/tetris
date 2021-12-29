@@ -158,9 +158,7 @@ class GridType1 extends FallGrid{
 
     return this.getCurrentPosition();
   }
-
   
-
   /** 获取预览数据 */
   getPreview () {
     return [

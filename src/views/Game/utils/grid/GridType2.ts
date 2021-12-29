@@ -26,7 +26,7 @@ import {
  * 2、[* * * * * * * * * *]
  * 3、[* * * * * * * * * *]
  * 0 3
- * 1 6
+ * 1 5
  * 
  * 180度
  * *   0 1 2 3 4 5 6 7 8 9
@@ -155,18 +155,55 @@ class GridType2 extends FallGrid{
     return ret;
   }
 
-  checkToNextLine (gameStatus: GameStatus): boolean {
+  checkCreateSuccess (gameStatus: GameStatus): boolean {
     const { x, y } = this;
-    
-    const checkPoint1 = gameStatus[y + 1][x];
-    const checkPoing2 = gameStatus[y + 2][x + 1];
-    const checkPoing3 = gameStatus[y + 2][x + 1];
-    const checkPoing4 = gameStatus[y + 2][x + 1];
 
-    return true
+    const checkPoint1 = gameStatus[y][x];
+    const checkPoint2 = gameStatus[y][x + 1];
+    const checkPoint3 = gameStatus[y + 1][x + 1];
+    const checkPoint4 = gameStatus[y + 1][x + 2];
+
+    return ![checkPoint1, checkPoint2, checkPoint3, checkPoint4].includes(1);
   }
 
-  toNextLine (): GridPoint[] {
+  checkToNextLine (gameStatus: GameStatus): boolean {
+    const { x, y, angle } = this;
+
+    let checkPointList: GridStatus[] = [];
+    const gameHeight = gameStatus.length - 1;
+
+    const isNormalAngle = angle === 0;
+
+    const isHeightmost = y >= gameHeight - (isNormalAngle ? 1 : 2);
+
+    if (isHeightmost) {
+      return false;
+    }
+
+    if (isNormalAngle) {
+      // 普通
+      const checkPoint1 = gameStatus[y + 1][x];
+      const checkPoint2 = gameStatus[y + 2][x + 1];
+      const checkPoint3 = gameStatus[y + 2][x + 2];
+
+      checkPointList = [checkPoint1, checkPoint2, checkPoint3];
+    } else {
+      // 竖版
+      const checkPoint1 = gameStatus[y + 3][x];
+      const checkPoint2 = gameStatus[y + 2][x + 1];
+
+      checkPointList = [checkPoint1, checkPoint2];
+    }
+
+    return !checkPointList.includes(1);
+  }
+
+  toNextLine (gameStatus: GameStatus): GridPoint[] | null {
+    const isAllowToNext = this.checkToNextLine(gameStatus);
+
+    if (!isAllowToNext) {
+      return null;
+    }
     this.y++;
 
     return this.getCurrentPosition();
