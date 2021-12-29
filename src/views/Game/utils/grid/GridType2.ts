@@ -50,17 +50,13 @@ import {
  * 5、[* * * * * * * * 0 *]
  * 
  * *   0 1 2 3 4 5 6 7 8 9
- * 0、[* * * * * * * * * 0]
- * 1、[* * * * * * * * 0 0]
- * 2、[* * * * * * * * 0 *]
+ * 0、[* 0 * * * 0 * * * 0]
+ * 1、[0 0 * * 0 0 * * 0 0]
+ * 2、[0 * * * 0 * * * 0 *]
  * 3、[* * * * * * * * * *]
- * 4、[* * * * * * * 0 0 *]
- * 5、[* * * * * * * * 0 0]
- * 6、[* * * * * * * * * *]
+ * 4、[0 0 * * 0 0 * 0 0 *]
+ * 5、[* 0 0 * * 0 0 * 0 0]
  */
-
-// 3 0
-// 3 2
 
 class GridType2 extends FallGrid{
   // 当前坐标
@@ -75,15 +71,31 @@ class GridType2 extends FallGrid{
   private angle: number = 0;
 
   rotate(gameStatus: GameStatus): GridPoint[] {
+    const { x, y } = this;
     const angle = ((this.angle / 180 + 1) % 2) * 180;
-
-    this.angle = angle;
+    const gameWidth = gameStatus[0].length - 1;
 
     if (angle === 0) {
-      // 从竖起来转为普通
+      // 从竖的转成普通
+      
+      // 在最右侧的话需要左移1格，否则就超出最右侧了
+      const isRightmost = x >= gameWidth - 1;
+
+      if (isRightmost) {
+        this.x--;
+      }
     } else {
-      // 从普通转为竖起来
+      // 从普通转成竖的
+
+      // 希望：在最右侧的话转回来能贴在右侧
+      const isRightmost = x >= gameWidth - 2;
+
+      if (isRightmost) {
+        this.x++;
+      }
     }
+
+    this.angle = angle;
 
     return this.getCurrentPosition();
   }
@@ -136,8 +148,6 @@ class GridType2 extends FallGrid{
         x,
         y: y + 2
       }
-
-      console.log('旋转结果：', ret);
 
       ret = [point1, point2, point3, point4];
     }

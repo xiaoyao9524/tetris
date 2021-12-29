@@ -21,7 +21,7 @@ const rowCount = ref(20);
 const colCount = ref(10);
 
 // 下落间隔(ms)
-const fallInterval = ref(400);
+const fallInterval = ref(2000);
 
 // 初始化游戏状态
 gameStatus.value = createGameStatus(rowCount.value, colCount.value);
