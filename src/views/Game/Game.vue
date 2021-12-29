@@ -46,6 +46,12 @@ const lookGameStatus = () => {
  *    类型5
  *         *
  *        ***
+ *    类型6
+ *        *
+ *        ***
+ *    类型7
+ *          *
+ *        ***
  */
 
 // 创建下落元素(此次创建就不用检查是否创建成功了，必定会成功)
@@ -169,6 +175,17 @@ const handlerFallMoment = () => {
 // 开始下落
 setTimeout(handlerFallMoment, fallInterval.value);
 
+// 旋转
+const handlerRotate = () => {
+  const rotateResult = fallEl.value.rotate(gameStatus.value);
+
+  clearFallEl();
+
+  fallElBeforePoint.value = rotateResult;
+
+  renderFallEl();
+}
+
 // 向左
 const handlerToLeft = () => {
   const moveResult = fallEl.value.toLeft(gameStatus.value);
@@ -251,7 +268,7 @@ const handlerToRight = () => {
       <div class="operation-item" @click="handlerToLeft">
         <span class="icon-font">&#xe84b;</span>
       </div>
-      <div class="operation-item">
+      <div class="operation-item" @click="handlerRotate">
         <span class="icon-font">&#xe7e7;</span>
       </div>
       <div class="operation-item">

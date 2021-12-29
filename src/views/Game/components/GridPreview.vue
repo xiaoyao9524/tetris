@@ -30,12 +30,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-console.log('p: ', props)
-
 const gridStatus = ref<number[][]>(props.grid.getPreview())
-
-
-
 
 </script>
 

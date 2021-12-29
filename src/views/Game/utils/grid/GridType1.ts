@@ -26,20 +26,39 @@ import {
  */
 
 class GridType1 extends FallGrid{
-  // constructor () {
-  //   super();
-  // }
-
   // 当前坐标
   x: number = 4;
   y: number = 0;
 
-  /** 获取预览数据 */
-  getPreview () {
-    return [
-      [0, 1, 1, 0],
-      [0, 1, 1, 0]
-    ]
+  /**旋转 */
+  rotate (): GridPoint[] {
+    // 本类型的方块，旋转可以视为无效果
+    return this.getCurrentPosition();
+  }
+
+  // 获取当前各点坐标
+  getCurrentPosition (): GridPoint[] {
+    const {x, y} = this;
+    const point1: GridPoint = {
+      x,
+      y
+    }
+
+    const point2: GridPoint = {
+      x: x + 1,
+      y
+    }
+    const point3: GridPoint = {
+      x,
+      y: y + 1
+    }
+
+    const point4: GridPoint = {
+      x: x + 1,
+      y: y + 1
+    }
+
+    return [point1, point2, point3, point4];
   }
 
   /** 检查是否生成成功 */
@@ -140,29 +159,14 @@ class GridType1 extends FallGrid{
     return this.getCurrentPosition();
   }
 
-  // 获取当前各点坐标
-  getCurrentPosition (): GridPoint[] {
-    const {x, y} = this;
-    const point1: GridPoint = {
-      x,
-      y
-    }
+  
 
-    const point2: GridPoint = {
-      x: x + 1,
-      y
-    }
-    const point3: GridPoint = {
-      x,
-      y: y + 1
-    }
-
-    const point4: GridPoint = {
-      x: x + 1,
-      y: y + 1
-    }
-
-    return [point1, point2, point3, point4];
+  /** 获取预览数据 */
+  getPreview () {
+    return [
+      [0, 1, 1, 0],
+      [0, 1, 1, 0]
+    ]
   }
 }
 

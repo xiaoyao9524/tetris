@@ -34,14 +34,14 @@ export const createFallElement = (): FallGrid => {
 
   switch (random) {
     case 1:
-      grid = new GridType1();
+      grid = new GridType2();
       break
       break;
     case 2:
       // grid = new GridType2();
       // break
     default:
-      grid = new GridType1();
+      grid = new GridType2();
   }
 
   return grid;
