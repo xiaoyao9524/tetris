@@ -22,16 +22,19 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type {GameStatus} from '../types'
+import { FallGrid } from '../utils/grid/GridType';
 
-interface Props {}
+interface Props {
+  grid: FallGrid
+}
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const gridStatus = ref<GameStatus>([
-  [ 0, 0, 1, 1, 0],
-  [ 0, 1, 1, 0, 0]
-])
+console.log('p: ', props)
+
+const gridStatus = ref<number[][]>(props.grid.getPreview())
+
+
 
 
 </script>

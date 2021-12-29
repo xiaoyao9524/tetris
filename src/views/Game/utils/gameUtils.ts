@@ -6,7 +6,7 @@ import type {
 } from '../types';
 
 
-import {FallGrid} from './grid/GridType';
+import { FallGrid } from './grid/GridType';
 import GridType1 from './grid/GridType1';
 import GridType2 from './grid/GridType2';
 

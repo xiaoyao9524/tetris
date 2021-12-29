@@ -34,6 +34,14 @@ class GridType1 extends FallGrid{
   x: number = 4;
   y: number = 0;
 
+  /** 获取预览数据 */
+  getPreview () {
+    return [
+      [0, 1, 1, 0],
+      [0, 1, 1, 0]
+    ]
+  }
+
   /** 检查是否生成成功 */
   checkCreateSuccess (gameStatus: GameStatus): boolean {
     const { x, y } = this;

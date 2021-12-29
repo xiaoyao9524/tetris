@@ -51,6 +51,9 @@ const lookGameStatus = () => {
 // 创建下落元素(此次创建就不用检查是否创建成功了，必定会成功)
 const fallEl = ref<FallGrid>(createFallElement());
 
+// 预览下一个元素
+const nextFallEl = ref<FallGrid>(createFallElement());
+
 // 保存之前下落元素坐标
 const fallElBeforePoint = ref<GridPoint[]>(fallEl.value.getCurrentPosition());
 
@@ -133,12 +136,14 @@ const handlerFallMoment = () => {
     checkRowClear();
 
     // 生成下一个下落元素
-    fallEl.value = createFallElement();
+    // fallEl.value = createFallElement();
+    fallEl.value = nextFallEl.value;
     const isCreateSuccess = fallEl.value.checkCreateSuccess(gameStatus.value);
     console.log("是否生成成功：", isCreateSuccess);
 
     if (isCreateSuccess) {
       renderFallEl();
+      nextFallEl.value = createFallElement();
       // 执行下一次
       setTimeout(handlerFallMoment, fallInterval.value);
     } else {
@@ -231,7 +236,7 @@ const handlerToRight = () => {
         <div class="info-item">
           <p class="label">下一个</p>
           <div class="next-fall">
-            <GridPreview />
+            <GridPreview :grid="nextFallEl" />
           </div>
         </div>
 
