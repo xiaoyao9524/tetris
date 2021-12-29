@@ -1,3 +1,67 @@
+<template>
+  <div class="game-page">
+    <div class="main-game">
+      <div class="game-container">
+        <div
+          class="game-row"
+          v-for="(row, index) in gameStatus"
+          :key="index"
+        >
+          <div
+            :class="{
+              'game-grid': true,
+              'fall-done': gameStatus[index][gIndex] === 1,
+              'fall-in': gameStatus[index][gIndex] === 2,
+            }"
+            v-for="(grid, gIndex) in row"
+            :key="gIndex"
+          ></div>
+        </div>
+      </div>
+
+      <div class="game-info">
+        <div class="info-item">
+          <p class="label">分数</p>
+          <p class="value">20</p>
+        </div>
+
+        <div class="info-item">
+          <p class="label">下一个</p>
+          <div class="next-fall">
+            <GridPreview :grid="nextFallEl" />
+          </div>
+        </div>
+
+        <div>
+          <button @click="lookGameStatus">查看游戏状态</button>
+          <button @click="handlerFallMoment">下落一行</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="operation-container">
+      <div
+        class="operation-item"
+        @click="handlerToLeft"
+      >
+        <span class="icon-font">&#xe84b;</span>
+      </div>
+      <div
+        class="operation-item"
+        @click="handlerRotate"
+      >
+        <span class="icon-font">&#xe7e7;</span>
+      </div>
+      <div class="operation-item">
+        <span
+          class="icon-font"
+          @click="handlerToRight"
+        >&#xe84a;</span>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { ref } from "vue";
 // util
@@ -184,7 +248,7 @@ const handlerRotate = () => {
   fallElBeforePoint.value = rotateResult;
 
   renderFallEl();
-}
+};
 
 // 向左
 const handlerToLeft = () => {
@@ -223,61 +287,6 @@ const handlerToRight = () => {
 };
 </script>
 
-<template>
-  <div class="game-page">
-    <div class="main-game">
-      <div class="game-container">
-        <div
-          class="game-row"
-          v-for="(row, index) in gameStatus"
-          :key="index"
-        >
-          <div
-            :class="{
-              'game-grid': true,
-              'fall-done': gameStatus[index][gIndex] === 1,
-              'fall-in': gameStatus[index][gIndex] === 2,
-            }"
-            v-for="(grid, gIndex) in row"
-            :key="gIndex"
-          ></div>
-        </div>
-      </div>
-
-      <div class="game-info">
-        <div class="info-item">
-          <p class="label">分数</p>
-          <p class="value">20</p>
-        </div>
-
-        <div class="info-item">
-          <p class="label">下一个</p>
-          <div class="next-fall">
-            <GridPreview :grid="nextFallEl" />
-          </div>
-        </div>
-
-        <div>
-          <button @click="lookGameStatus">查看游戏状态</button>
-          <button @click="handlerFallMoment">下落一行</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="operation-container">
-      <div class="operation-item" @click="handlerToLeft">
-        <span class="icon-font">&#xe84b;</span>
-      </div>
-      <div class="operation-item" @click="handlerRotate">
-        <span class="icon-font">&#xe7e7;</span>
-      </div>
-      <div class="operation-item">
-        <span class="icon-font" @click="handlerToRight">&#xe84a;</span>
-      </div>
-    </div>
-  </div>
-</template>
-
 <style scoped lang="scss">
 .game-page {
   display: flex;
@@ -301,7 +310,7 @@ const handlerToRight = () => {
         display: flex;
         height: 30px;
         box-sizing: border-box;
-        
+
         .game-grid {
           flex: 0 0 auto;
           width: 30px;
