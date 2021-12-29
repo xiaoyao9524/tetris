@@ -10,8 +10,8 @@ const routes = [
     component: () => import('@/views/About')
   },
   {
-    path: '/game',
-    component: () => import('@/views/Game')
+    path: '/play',
+    component: () => import('@/views/Play')
   },
 ]
 

@@ -23,7 +23,7 @@ const RenderComponent = computed(() => {
 })
 
 const startGame = () => {
-  router.push('/game')
+  router.push('/play')
 }
 </script>
 
