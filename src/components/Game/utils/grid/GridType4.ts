@@ -61,6 +61,11 @@ import {
  * 6 0
  */
 
+interface CheckToRotateResult {
+  isAllow: boolean;
+  moveUp: number;
+}
+
 class GridType4 extends FallGrid{
   // 初始坐标
   x: number = 4;
@@ -74,11 +79,13 @@ class GridType4 extends FallGrid{
   private angle: number = 0;
 
   // 检查是否可以旋转
-  checkToRotate (gameStatus: GameStatus): boolean | number {
-    /**
-     * 如果返回值为数字，那么需要
-     */
+  checkToRotate (gameStatus: GameStatus): CheckToRotateResult {
     const { x, y, angle } = this;
+
+    const checkResult: CheckToRotateResult = {
+      isAllow: false,
+      moveUp: -1
+    }
 
     const gameHeight = gameStatus.length - 1;
 
@@ -93,17 +100,21 @@ class GridType4 extends FallGrid{
       console.log('fallLastNum: ', fallLastNum)
 
       if (fallLastNum <= 3) {
-        return fallLastNum;
+        // return fallLastNum;
+        checkResult.moveUp = fallLastNum;
       }
 
       // 横，要转成竖
-      console.log('横，要转成竖')
+      console.log('横，要转成竖: ', gameStatus);
       const checkPoint1 = gameStatus[y][x + 1];
-      const checkPoint2 = gameStatus[y + 1][x + 1];
-      const checkPoint3 = gameStatus[y + 2][x + 1];
-      const checkPoint4 = gameStatus[y + 3][x + 1];
+      const checkPoint2 = gameStatus[y + 1] ? gameStatus[y + 1][x + 1] : null;
+      const checkPoint3 = gameStatus[y + 2] ? gameStatus[y + 2][x + 1] : null;
+      const checkPoint4 = gameStatus[y + 3] ? gameStatus[y + 3][x + 1] : null;
 
-      checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
+      checkList = [checkPoint1];
+      checkPoint2 && checkList.push(checkPoint2);
+      checkPoint3 && checkList.push(checkPoint3);
+      checkPoint4 && checkList.push(checkPoint4);
     } else {
       // 竖，要转成横
       console.log('竖，要转成横')
@@ -115,22 +126,26 @@ class GridType4 extends FallGrid{
       checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
     }
 
-    console.log('checkList: ', checkList);
+    checkResult.isAllow = !checkList.includes(1);
 
-    return !checkList.includes(1);
+    return checkResult;
   }
 
   rotate (gameStatus: GameStatus): GridPoint[] | null {
+    console.clear();
     const isAllowToRotate = this.checkToRotate(gameStatus);
-    console.log('是否可以旋转：', isAllowToRotate)
 
-    const isAllowToRotateType = typeof isAllowToRotate;
+    const { isAllow, moveUp } = isAllowToRotate;
 
-    if (isAllowToRotateType === 'number') {
-      this.y -= (3 - (isAllowToRotate as number));
-    } else if (!isAllowToRotate) {
-      return null;
+    if (!isAllow) {
+      return null
     }
+    
+    if (moveUp >= 0) {
+      this.y -= (3 - moveUp);
+    }
+
+    console.log('y: ', this.y)
 
     const { x, y } = this;
     const angle = ((this.angle / 180 + 1) % 2) * 180;

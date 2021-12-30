@@ -115,6 +115,7 @@ const clearFallEl = () => {
 // 渲染下落元素
 const renderFallEl = () => {
   const fallPosition = fallEl.value.getCurrentPosition();
+  console.log('fallPosition: ', fallPosition)
 
   for (const point of fallPosition) {
     const { x, y } = point;
