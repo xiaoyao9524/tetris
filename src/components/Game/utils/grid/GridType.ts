@@ -12,7 +12,7 @@ export abstract class FallGrid {
   abstract x: number;
   abstract y: number;
 
-  abstract rotate(gameStatus: GameStatus): GridPoint[];
+  abstract rotate(gameStatus: GameStatus): GridPoint[] | null;
   abstract getPreview(): number[][];
   abstract checkCreateSuccess(gameStatus: GameStatus): boolean;
   abstract checkToNextLine(gameStatus: GameStatus): boolean;

@@ -139,8 +139,8 @@ const handlerFallDone = () => {
 
 // 检查是否有消除的行
 const checkRowClear = () => {
-  console.clear();
-  console.log("检查是否有消除的行: ");
+  // console.clear();
+  // console.log("检查是否有消除的行: ");
   let mapStr = ``;
 
   for (const row of gameStatus.value) {
@@ -175,7 +175,7 @@ const handlerFallMoment = () => {
 
   if (!toNextLineResult) {
     /** 无法再下落 */
-    console.log("此行已落到底");
+    // console.log("此行已落到底");
     // fallElBeforePoint.value = [];
     handlerFallDone();
 
@@ -186,7 +186,7 @@ const handlerFallMoment = () => {
     // fallEl.value = createFallElement();
     fallEl.value = nextFallEl.value;
     const isCreateSuccess = fallEl.value.checkCreateSuccess(gameStatus.value);
-    console.log("是否生成成功：", isCreateSuccess);
+    // console.log("是否生成成功：", isCreateSuccess);
 
     if (isCreateSuccess) {
       renderFallEl();
@@ -219,6 +219,10 @@ setTimeout(handlerFallMoment, fallInterval.value);
 // 旋转
 const handlerRotate = () => {
   const rotateResult = fallEl.value.rotate(gameStatus.value);
+
+  if (!rotateResult) {
+    return
+  }
 
   clearFallEl();
 

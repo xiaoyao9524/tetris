@@ -10,6 +10,7 @@ import { FallGrid } from './grid/GridType';
 import GridType1 from './grid/GridType1';
 import GridType2 from './grid/GridType2';
 import GridType3 from './grid/GridType3';
+import GridType4 from './grid/GridType4';
 
 /**
  * 下落的格子类型：
@@ -23,7 +24,10 @@ import GridType3 from './grid/GridType3';
  *         **
  *        **
  *    类型4
- *        ****
+ *        *
+ *        *
+ *        *
+ *        *
  *    类型5
  *         *
  *        ***
@@ -59,14 +63,14 @@ export const createFallElement = (): FallGrid => {
 
   switch (random) {
     case 1:
-      grid = new GridType3();
+      grid = new GridType4();
       break
       break;
     case 2:
       // grid = new GridType2();
       // break
     default:
-      grid = new GridType3();
+      grid = new GridType4();
   }
 
   return grid;
