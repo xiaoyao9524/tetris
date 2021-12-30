@@ -94,29 +94,6 @@ const lookGameStatus = () => {
   console.log("gameStatus: ", gameStatus.value);
   console.log(gameStatus.value.map((i) => i.length));
 };
-/**
- * 当前下落的格子：
- *    类型1
- *        **
- *        **
- *    类型2
- *        **
- *         **
- *    类型3
- *         **
- *        **
- *    类型4
- *        ****
- *    类型5
- *         *
- *        ***
- *    类型6
- *        *
- *        ***
- *    类型7
- *          *
- *        ***
- */
 
 // 创建下落元素(此次创建就不用检查是否创建成功了，必定会成功)
 const fallEl = ref<FallGrid>(createFallElement());

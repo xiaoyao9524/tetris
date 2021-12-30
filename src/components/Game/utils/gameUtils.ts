@@ -10,6 +10,30 @@ import { FallGrid } from './grid/GridType';
 import GridType1 from './grid/GridType1';
 import GridType2 from './grid/GridType2';
 
+/**
+ * 下落的格子类型：
+ *    类型1
+ *        **
+ *        **
+ *    类型2
+ *        **
+ *         **
+ *    类型3
+ *         **
+ *        **
+ *    类型4
+ *        ****
+ *    类型5
+ *         *
+ *        ***
+ *    类型6
+ *        *
+ *        ***
+ *    类型7
+ *          *
+ *        ***
+ */
+
 // 创建游戏初始状态
 export const createGameStatus = (rowCount: number, colCount: number): GameStatus => {
   const status: GameStatus = [];

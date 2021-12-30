@@ -1,6 +1,5 @@
 <template>
   <div class="grid-preview">
-    
     <div class="grid-container">
       <div 
         class="grid-row"
