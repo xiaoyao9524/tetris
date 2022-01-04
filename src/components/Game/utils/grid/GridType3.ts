@@ -26,10 +26,6 @@ import {
  * 2、[* * * * * * * * * *]
  * 3、[* * * * * * * * * *]
  * 
- * x y
- * 3 0
- * 5 1
- * 
  * 180度
  * *   0 1 2 3 4 5 6 7 8 9
  * 0、[* * * 0 * * * * * *]
@@ -37,9 +33,10 @@ import {
  * 2、[* * * * 0 * * * * *]
  * 3、[* * * * * * * * * *]
  * 
- * x y
+ * x y 
  * 3 0
- * 5 2
+ * 4 0
+ * 5 0
  */
 
 class GridType3 extends FallGrid{
@@ -54,8 +51,45 @@ class GridType3 extends FallGrid{
    */
   private angle: number = 0;
 
-  rotate(gameStatus: GameStatus): GridPoint[] {
+  checkAllowRotate (gameStatus: GameStatus): boolean {
+    const { x, y, angle } = this;
+
+    const isNormalAngle = angle === 0;
+
+    const gameHeight = gameStatus.length - 1;
+
+    const isDown = y >= gameHeight - (isNormalAngle ? 1 : 2)
+
+    // 如果横着并且到底，那么无法旋转
+    if (isNormalAngle && isDown) {
+      return false;
+    }
+
+    let checkList: GridStatus[] = [];
+
+    if (isNormalAngle) {
+      // 普通转竖
+      const checkPoint1 = gameStatus[y][x];
+      const checkPoint2 = gameStatus[y + 2][x + 1];
+
+      checkList = [checkPoint1, checkPoint2];
+    } else {
+      // 竖转普通
+      const checkPoint1 = gameStatus[y][x + 1];
+      const checkPoint2 = gameStatus[y][x + 2];
+      
+      checkList = [checkPoint1, checkPoint2];
+    }
+
+    return !checkList.includes(1);
+  }
+
+  rotate(gameStatus: GameStatus): GridPoint[] | null {
     const { x, y } = this;
+    const isAllowRotate = this.checkAllowRotate(gameStatus);
+    if (!isAllowRotate) {
+      return null
+    }
     const angle = ((this.angle / 180 + 1) % 2) * 180;
     const gameWidth = gameStatus[0].length - 1;
 

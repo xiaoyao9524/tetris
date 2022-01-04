@@ -12,16 +12,17 @@ export abstract class FallGrid {
   abstract x: number;
   abstract y: number;
 
-  abstract rotate(gameStatus: GameStatus): GridPoint[] | null;
-  abstract getPreview(): number[][];
+  // abstract checkToNextLine(gameStatus: GameStatus): boolean;
+  // abstract checkToLeft(gameStatus: GameStatus): boolean;
+  // abstract checkToRight(gameStatus: GameStatus): boolean;
+
   abstract checkCreateSuccess(gameStatus: GameStatus): boolean;
-  abstract checkToNextLine(gameStatus: GameStatus): boolean;
-  abstract checkToLeft(gameStatus: GameStatus): boolean;
-  abstract checkToRight(gameStatus: GameStatus): boolean;
+  abstract rotate(gameStatus: GameStatus): GridPoint[] | null;
   abstract toNextLine(gameStatus: GameStatus): GridPoint[] | null;
   abstract toLeft(gameStatus: GameStatus): GridPoint[] | null;
   abstract toRight(gameStatus: GameStatus): GridPoint[] | null;
   abstract getCurrentPosition(): GridPoint[];
+  abstract getPreview(): number[][];
 }
 
 export interface GridPoint {
