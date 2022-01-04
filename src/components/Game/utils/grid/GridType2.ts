@@ -25,8 +25,6 @@ import {
  * 1、[* * * * 0 0 * * * *]
  * 2、[* * * * * * * * * *]
  * 3、[* * * * * * * * * *]
- * 0 3
- * 1 5
  * 
  * 180度
  * *   0 1 2 3 4 5 6 7 8 9
@@ -34,28 +32,29 @@ import {
  * 1、[* * * 0 0 * * * * *]
  * 2、[* * * 0 * * * * * *]
  * 3、[* * * * * * * * * *]
- * 0 3 
- * 2 4
  * 
  */
 
 /**
  * 展示
- * *   0 1 2 3 4 5 6 7 8 9
- * 0、[* * * * * * * 0 0 *]
- * 1、[* * * * * * * * 0 0]
+ *     0 1 2 3 4 5 6 7 8 9
+ * 0、[* * * 0 0 * * * * *]
+ * 1、[* * * * 0 0 * * * *]
  * 2、[* * * * * * * * * *]
- * 3、[* * * * * * * * * 0]
- * 4、[* * * * * * * * 0 0]
- * 5、[* * * * * * * * 0 *]
- * 
- * *   0 1 2 3 4 5 6 7 8 9
- * 0、[* 0 * * * 0 * * * 0]
- * 1、[0 0 * * 0 0 * * 0 0]
- * 2、[0 * * * 0 * * * 0 *]
  * 3、[* * * * * * * * * *]
- * 4、[0 0 * * 0 0 * 0 0 *]
- * 5、[* 0 0 * * 0 0 * 0 0]
+ * x y
+ * 3 0
+ * 3 2
+ * 
+ *     0 1 2 3 4 5 6 7 8 9
+ * 0、[* * * * 0 * * * * *]
+ * 1、[* * * 0 0 * * * * *]
+ * 2、[* * * 0 * * * * * *]
+ * 3、[* * * * * * * * * *]
+ * 
+ * x y
+ * 3 0
+ * 5 1
  */
 
 class GridType2 extends FallGrid{
@@ -70,10 +69,48 @@ class GridType2 extends FallGrid{
    */
   private angle: number = 0;
 
-  rotate(gameStatus: GameStatus): GridPoint[] {
+  private checkToRotate (gameStatus: GameStatus): boolean {
+    const { x, y, angle } = this;
+    const isNormalAngle = angle === 0;
+
+    // 首先判断是否已经到最下面了(普通情况为到最后一行，竖着的情况为到倒数第二行)
+    const gameRowCount = gameStatus.length - 1;
+
+    const isDown = y >= gameRowCount - (isNormalAngle ? 1 : 2);
+
+    if (isDown) {
+      return false;
+    }
+
+    let checkList: GridStatus[] = [];
+    
+    if (isNormalAngle) {
+      // 普通转竖
+      const checkPoint1 = gameStatus[y + 1][x];
+      const checkPoint2 = gameStatus[y + 2][x];
+
+      checkList = [checkPoint1, checkPoint2];
+    } else {
+      // 竖转普通
+      const checkPoint1 = gameStatus[y][x];
+      const checkPoint2 = gameStatus[y + 1][x + 2];
+
+      checkList = [checkPoint1, checkPoint2];
+    }
+
+    return !checkList.includes(1);
+  }
+
+  rotate(gameStatus: GameStatus): GridPoint[] | null {
     const { x, y } = this;
     const angle = ((this.angle / 180 + 1) % 2) * 180;
     const gameWidth = gameStatus[0].length - 1;
+
+    const isAllowRotate = this.checkToRotate(gameStatus);
+
+    if (!isAllowRotate) {
+      return null;
+    }
 
     if (angle === 0) {
       // 从竖的转成普通

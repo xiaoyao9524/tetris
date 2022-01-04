@@ -61,17 +61,19 @@ export const createFallElement = (): FallGrid => {
 
   let grid: FallGrid | null = null;
 
-  switch (random) {
-    case 1:
-      grid = new GridType4();
-      break
-      break;
-    case 2:
-      // grid = new GridType2();
-      // break
-    default:
-      grid = new GridType4();
-  }
+  // switch (random) {
+  //   case 1:
+  //     grid = new GridType4();
+  //     break
+  //     break;
+  //   case 2:
+  //     // grid = new GridType2();
+  //     // break
+  //   default:
+  //     grid = new GridType4();
+  // }
+
+  grid = new GridType2()
 
   return grid;
 }

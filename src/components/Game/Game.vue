@@ -2,11 +2,7 @@
   <div class="game-page">
     <div class="main-game">
       <div class="game-container">
-        <div
-          class="game-row"
-          v-for="(row, index) in gameStatus"
-          :key="index"
-        >
+        <div class="game-row" v-for="(row, index) in gameStatus" :key="index">
           <div
             :class="{
               'game-grid': true,
@@ -40,23 +36,14 @@
     </div>
 
     <div class="operation-container">
-      <div
-        class="operation-item"
-        @click="handlerToLeft"
-      >
+      <div class="operation-item" @click="handlerToLeft">
         <span class="icon-font">&#xe84b;</span>
       </div>
-      <div
-        class="operation-item"
-        @click="handlerRotate"
-      >
+      <div class="operation-item" @click="handlerRotate">
         <span class="icon-font">&#xe7e7;</span>
       </div>
       <div class="operation-item">
-        <span
-          class="icon-font"
-          @click="handlerToRight"
-        >&#xe84a;</span>
+        <span class="icon-font" @click="handlerToRight">&#xe84a;</span>
       </div>
     </div>
   </div>
@@ -77,6 +64,8 @@ import { FallGrid } from "./utils/grid/GridType";
 // component
 import GridPreview from "./components/GridPreview.vue";
 
+const testDown = ref(true);
+
 // 游戏状态
 const gameStatus = ref<GameStatus>([]);
 
@@ -85,7 +74,7 @@ const rowCount = ref(20);
 const colCount = ref(10);
 
 // 下落间隔(ms)
-const fallInterval = ref(400);
+const fallInterval = ref(600);
 
 // 初始化游戏状态
 gameStatus.value = createGameStatus(rowCount.value, colCount.value);
@@ -115,7 +104,7 @@ const clearFallEl = () => {
 // 渲染下落元素
 const renderFallEl = () => {
   const fallPosition = fallEl.value.getCurrentPosition();
-  console.log('fallPosition: ', fallPosition)
+  console.log("fallPosition: ", fallPosition);
 
   for (const point of fallPosition) {
     const { x, y } = point;
@@ -193,7 +182,9 @@ const handlerFallMoment = () => {
       renderFallEl();
       nextFallEl.value = createFallElement();
       // 执行下一次
-      setTimeout(handlerFallMoment, fallInterval.value);
+      if (!testDown.value) {
+        setTimeout(handlerFallMoment, fallInterval.value);
+      }
     } else {
       console.log("游戏结束！");
     }
@@ -210,19 +201,23 @@ const handlerFallMoment = () => {
     renderFallEl();
 
     // 执行下一次
-    setTimeout(handlerFallMoment, fallInterval.value);
+    if (!testDown.value) {
+      setTimeout(handlerFallMoment, fallInterval.value);
+    }
   }
 };
 
 // 开始下落
-setTimeout(handlerFallMoment, fallInterval.value);
+if (!testDown.value) {
+  setTimeout(handlerFallMoment, fallInterval.value);
+}
 
 // 旋转
 const handlerRotate = () => {
   const rotateResult = fallEl.value.rotate(gameStatus.value);
 
   if (!rotateResult) {
-    return
+    return;
   }
 
   clearFallEl();
