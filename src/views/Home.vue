@@ -10,20 +10,28 @@ const router = useRouter();
 
 const count = ref(0);
 
-const RenderComponent = computed(() => {
-  const c = count.value % 3;
-  switch (c) {
-    case 0:
-      return Foo;
-    case 1:
-      return Bar;
-    default:
-      return Baz;
-  }
-})
+// const RenderComponent = computed(() => {
+//   const c = count.value % 3;
+//   switch (c) {
+//     case 0:
+//       return Foo;
+//     case 1:
+//       return Bar;
+//     default:
+//       return Baz;
+//   }
+// })
 
 const startGame = () => {
   router.push('/play')
+}
+
+const handlerChange = (val: string) => {
+  console.log('change触发：', val);
+}
+
+const handlerConfirm = (val: string) => {
+  console.log('confirm触发：', val);
 }
 </script>
 
@@ -34,7 +42,9 @@ const startGame = () => {
       type="button"
       @click="count++"
     >count is: {{ count }}</button>
-    <component :is="RenderComponent" />
+    <!-- <component :is="RenderComponent" /> -->
+
+    <Foo @change="handlerChange" @confirm="handlerConfirm" />
 
     <button @click="startGame">开始游戏</button>
   </div>
