@@ -312,8 +312,18 @@ class GridType4 extends FallGrid {
   checkToLeft(gameStatus: GameStatus): boolean {
     const { x, y, angle } = this;
 
-    const isLeftmost = x <= 0;
-    
+    let isLeftmost = false;
+
+    switch (angle) {
+      case 0:
+      case 180:
+      case 270:
+        isLeftmost = x <= 1;
+        break;
+      default:
+        isLeftmost = x <= 0;
+    }
+
     if (isLeftmost) {
       return false;
     }
