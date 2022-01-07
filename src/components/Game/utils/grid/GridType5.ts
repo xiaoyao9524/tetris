@@ -15,44 +15,66 @@ import {
  * 类型5
  *      *
  *     ***
+ * 以中心点为基准
  */
 
 /**
- * 普通角度(x: 3, y: 0)
+ * 普通角度(x: 4, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
  * 0、[* * * * 0 * * * * *]
  * 1、[* * * 0 0 0 * * * *]
  * 2、[* * * * * * * * * *]
+ * x y
+ * 4 1
+ * 3 2 p1
+ * 4 2 p2
+ * 5 2 p3
  * 
- * 90度(x: 4, y: 0)
+ * 90度(x: 4, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
  * 0、[* * * * 0 * * * * *]
  * 1、[* * * * 0 0 * * * *]
  * 2、[* * * * 0 * * * * *]
+ * 3、[* * * * * * * * * *]
  * 
- * 180度(x: 3, y: 1)
+ * 180度(x: 4, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
  * 0、[* * * * * * * * * *]
  * 1、[* * * 0 0 0 * * * *]
  * 2、[* * * * 0 * * * * *]
-
+ * 3、[* * * * * * * * * *]
  *
- * 270度(x: 3, y: 0)
+ * 270度(x: 4, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
  * 0、[* * * * 0 * * * * *]
  * 1、[* * * 0 0 * * * * *]
  * 2、[* * * * 0 * * * * *]
+ * 3、[* * * * * * * * * *]
+ * x y
+ * 4 1
+ * 3 2 p1
+ * 4 3 p2
  */
 
-interface CheckToRotateResult {
-  isAllow: boolean;
-  moveUp: number;
-}
+/**
+ *     0 1 2 3 4 5 6 7 8 9
+ * 0、[* * * * * * * * * *]
+ * 1、[* * * * 0 * * * * *]
+ * 2、[* * * 0 0 0 * * * *]
+ * 3、[* * * * * * * * * *]
+ * 
+ * 
+ *     0 1 2 3 4 5 6 7 8 9
+ * 0、[* * * * * * * * * *]
+ * 1、[* * * * 0 * * * * *]
+ * 2、[* * * * 0 0 * * * *]
+ * 3、[* * * * 0 * * * * *]
+ */
 
-class GridType4 extends FallGrid{
-  // 初始坐标
+class GridType4 extends FallGrid {
+  // 初始坐标(以中心点为初始坐标)
   x: number = 4;
-  y: number = 0;
+  y: number = 1;
 
   /**
    * 当前角度
@@ -61,156 +83,222 @@ class GridType4 extends FallGrid{
   private angle: number = 0;
 
   // 检查是否可以旋转
-  checkToRotate (gameStatus: GameStatus): CheckToRotateResult {
+  checkToRotate(gameStatus: GameStatus): boolean {
     const { x, y, angle } = this;
-
-    const checkResult: CheckToRotateResult = {
-      isAllow: false,
-      moveUp: -1
-    }
 
     const gameHeight = gameStatus.length - 1;
 
-    const isHorizontal = angle === 0;
-
-    let checkList = [];
-
-    if (!isHorizontal) {
-      console.log('gameHeight: ', gameHeight)
-      // 离最下面的行数
-      const fallLastNum = gameHeight - y;
-      console.log('fallLastNum: ', fallLastNum)
-
-      if (fallLastNum <= 3) {
-        // return fallLastNum;
-        checkResult.moveUp = fallLastNum;
-      }
-
-      // 横，要转成竖
-      console.log('横，要转成竖: ', gameStatus);
-      const checkPoint1 = gameStatus[y][x + 1];
-      const checkPoint2 = gameStatus[y + 1] ? gameStatus[y + 1][x + 1] : null;
-      const checkPoint3 = gameStatus[y + 2] ? gameStatus[y + 2][x + 1] : null;
-      const checkPoint4 = gameStatus[y + 3] ? gameStatus[y + 3][x + 1] : null;
-
-      checkList = [checkPoint1];
-      checkPoint2 && checkList.push(checkPoint2);
-      checkPoint3 && checkList.push(checkPoint3);
-      checkPoint4 && checkList.push(checkPoint4);
-    } else {
-      // 竖，要转成横
-      console.log('竖，要转成横')
-      const checkPoint1 = gameStatus[y][x - 1];
-      const checkPoint2 = gameStatus[y][x];
-      const checkPoint3 = gameStatus[y][x + 1];
-      const checkPoint4 = gameStatus[y][x + 2];
-
-      checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
+    // 如果中心点已经到了最后一行，那么不允许旋转
+    if (y >= gameHeight) {
+      return false;
     }
 
-    checkResult.isAllow = !checkList.includes(1);
+    // 如果中心点在最左侧或最右侧也不允许旋转
+    if (x <= 0 || x >= gameStatus[0].length - 1) {
+      return false;
+    }
 
-    return checkResult;
+    let checkList: GridStatus[] = [];
+
+    switch (angle) {
+      case 0: {
+        const checkPoint1 = gameStatus[y + 1][x];
+
+        checkList = [checkPoint1];
+        break;
+      }
+      case 90: {
+        const checkPoint1 = gameStatus[y][x - 1];
+
+        checkList = [checkPoint1];
+        break;
+      }
+      case 180: {
+        const checkPoint1 = gameStatus[y][x - 1];
+
+        checkList = [checkPoint1];
+        break;
+      }
+      case 270: {
+        const checkPoint1 = gameStatus[y][x + 1];
+
+        checkList = [checkPoint1];
+        break;
+      }
+    }
+
+    return !checkList.includes(1);
   }
 
-  rotate (gameStatus: GameStatus): GridPoint[] | null {
-    console.clear();
-    // const isAllowToRotate = this.checkToRotate(gameStatus);
+  rotate(gameStatus: GameStatus): GridPoint[] | null {
+    const isAllowToRotate = this.checkToRotate(gameStatus);
 
-    // const { isAllow, moveUp } = isAllowToRotate;
+    if (!isAllowToRotate) {
+      return null;
+    }
 
-    // if (!isAllow) {
-    //   return null
-    // }
-    
-    // if (moveUp >= 0) {
-    //   this.y -= (3 - moveUp);
-    // }
+    const { angle } = this;
 
-    // console.log('y: ', this.y)
-    /**
-     * 0 0
-     * 1 90
-     * 2 180
-     * 3 270
-     */
-
-    // console.log(((0 / 90) % 4 * 90))
-    // console.log(((90 / 90) % 4 * 90))
-    // console.log(((180 / 90) % 4 * 90))
-    // console.log(((270 / 90) % 4 * 90))
-    // console.log(((360 / 90) % 4 * 90))
-
-    const { x, y, angle } = this;
     const newAngle = ((((angle + 90) / 90) % 4) * 90);
-    console.log('newAngle: ', newAngle)
-    // const gameWidth = gameStatus[0].length - 1;
-
-    
 
     this.angle = newAngle;
 
-    return [
-      {x: 1, y: 0}
-    ];
+    return this.getCurrentPosition();
   }
 
-  getCurrentPosition (): GridPoint[] {
+  getCurrentPosition(): GridPoint[] {
     const { x, y, angle } = this;
 
     let ret: GridPoint[] = [];
 
-    
+    switch (angle) {
+      case 0: {
+        const point1 = {
+          x,
+          y: y - 1
+        };
+        const point2 = {
+          x: x - 1,
+          y
+        };
+        const point3 = {
+          x,
+          y
+        };
+        const point4 = {
+          x: x + 1,
+          y
+        };
+        ret = [point1, point2, point3, point4];
+        break;
+      }
+      case 90: {
+        const point1 = {
+          x,
+          y: y - 1
+        };
+        const point2 = {
+          x,
+          y
+        };
+        const point3 = {
+          x: x + 1,
+          y
+        };
+        const point4 = {
+          x,
+          y: y + 1
+        };
+        ret = [point1, point2, point3, point4];
+        break;
+      }
+      case 180: {
+        const point1 = {
+          x: x - 1,
+          y
+        };
+        const point2 = {
+          x,
+          y
+        };
+        const point3 = {
+          x: x + 1,
+          y
+        };
+        const point4 = {
+          x,
+          y: y + 1
+        };
+        ret = [point1, point2, point3, point4];
+        break;
+      }
+      case 270: {
+        const point1 = {
+          x,
+          y: y - 1
+        };
+        const point2 = {
+          x: x - 1,
+          y
+        };
+        const point3 = {
+          x,
+          y
+        };
+        const point4 = {
+          x,
+          y: y + 1
+        };
+        ret = [point1, point2, point3, point4];
+        break;
+      }
+    }
 
     return ret;
   }
 
-  checkCreateSuccess (gameStatus: GameStatus): boolean {
+  checkCreateSuccess(gameStatus: GameStatus): boolean {
     const { x, y } = this;
 
-    const checkPoint1 = gameStatus[y][x + 1];
-    const checkPoint2 = gameStatus[y][x + 2];
-    const checkPoint3 = gameStatus[y + 1][x];
-    const checkPoint4 = gameStatus[y + 1][x + 1];
+    const checkPoint1 = gameStatus[y - 1][x];
+    const checkPoint2 = gameStatus[y][x - 1];
+    const checkPoint3 = gameStatus[y][x];
+    const checkPoint4 = gameStatus[y][x + 1];
 
     return ![checkPoint1, checkPoint2, checkPoint3, checkPoint4].includes(1);
   }
 
-  checkToNextLine (gameStatus: GameStatus): boolean {
+  checkToNextLine(gameStatus: GameStatus): boolean {
     const { x, y, angle } = this;
-
-    let checkPointList: GridStatus[] = [];
 
     const gameHeight = gameStatus.length - 1;
 
-    const isNormalAngle = angle === 0;
-
     // 检查是否到底了
-    const isHeightmost = y >= gameHeight - (isNormalAngle ? 3 : 0);
+    const isHeightmost = y >= gameHeight - (angle === 0 ? 0 : 1);
 
     if (isHeightmost) {
       return false;
     }
 
-    if (isNormalAngle) {
-      // 竖
-      const checkPoint1 = gameStatus[y + 4][x];
+    let checkPointList: GridStatus[] = [];
 
-      checkPointList = [checkPoint1];
-    } else {
-      // 横
-      const checkPoint1 = gameStatus[y + 1][x];
-      const checkPoint2 = gameStatus[y + 1][x + 1];
-      const checkPoint3 = gameStatus[y + 1][x + 2];
-      const checkPoint4 = gameStatus[y + 1][x + 3];
+    switch (angle) {
+      case 0: {
+        const checkPoint1 = gameStatus[y + 1][x - 1];
+        const checkPoint2 = gameStatus[y + 1][x];
+        const checkPoint3 = gameStatus[y + 1][x + 1];
 
-      checkPointList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
+        checkPointList = [checkPoint1, checkPoint2, checkPoint3];
+        break
+      }
+      case 90: {
+        const checkPoint1 = gameStatus[y + 2][x];
+        const checkPoint2 = gameStatus[y + 1][x + 1];
+
+        checkPointList = [checkPoint1, checkPoint2];
+        break
+      }
+      case 180: {
+        const checkPoint1 = gameStatus[y + 1][x - 1];
+        const checkPoint2 = gameStatus[y + 2][x];
+        const checkPoint3 = gameStatus[y + 1][x + 1];
+
+        checkPointList = [checkPoint1, checkPoint2, checkPoint3];
+        break
+      }
+      case 270: {
+        const checkPoint1 = gameStatus[y + 1][x - 1];
+        const checkPoint2 = gameStatus[y + 2][x];
+
+        checkPointList = [checkPoint1, checkPoint2];
+        break
+      }
     }
 
     return !checkPointList.includes(1);
   }
 
-  toNextLine (gameStatus: GameStatus): GridPoint[] | null {
+  toNextLine(gameStatus: GameStatus): GridPoint[] | null {
     const isAllowToNext = this.checkToNextLine(gameStatus);
 
     if (!isAllowToNext) {
@@ -220,11 +308,12 @@ class GridType4 extends FallGrid{
 
     return this.getCurrentPosition();
   }
-  
-  checkToLeft (gameStatus: GameStatus): boolean {
+
+  checkToLeft(gameStatus: GameStatus): boolean {
     const { x, y, angle } = this;
 
     const isLeftmost = x <= 0;
+    
     if (isLeftmost) {
       return false;
     }
@@ -248,7 +337,7 @@ class GridType4 extends FallGrid{
     return !checkPointList.includes(1);
   }
 
-  checkToRight (gameStatus: GameStatus): boolean {
+  checkToRight(gameStatus: GameStatus): boolean {
     const { x, y, angle } = this;
 
     const gameWidth = gameStatus[0].length - 1;
@@ -287,7 +376,7 @@ class GridType4 extends FallGrid{
     return !checkPointList.includes(1);
   }
 
-  toLeft (gameStatus: GameStatus): GridPoint[] | null {
+  toLeft(gameStatus: GameStatus): GridPoint[] | null {
     const isAllowToLeft = this.checkToLeft(gameStatus);
 
     if (!isAllowToLeft) {
@@ -299,9 +388,9 @@ class GridType4 extends FallGrid{
     return this.getCurrentPosition();
   }
 
-  toRight (gameStatus: GameStatus): GridPoint[] | null {
+  toRight(gameStatus: GameStatus): GridPoint[] | null {
     const isAllowToRight = this.checkToRight(gameStatus);
-    
+
     if (!isAllowToRight) {
       return null;
     }
@@ -312,7 +401,7 @@ class GridType4 extends FallGrid{
   }
 
   /** 获取预览数据 */
-  getPreview () {
+  getPreview() {
     return [
       [0, 0, 1, 0, 0],
       [0, 1, 1, 1, 0],
