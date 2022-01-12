@@ -29,7 +29,7 @@
         </div>
 
         <div>
-          <button @click="lookGameStatus">查看游戏状态</button>
+          <!-- <button @click="lookGameStatus">查看游戏状态</button> -->
           <button @click="handlerFallMoment">下落一行</button>
         </div>
       </div>
