@@ -19,37 +19,43 @@ import {
  */
 
 /**
- * 普通角度(x: 4, y: 1)
+ * 普通角度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
  * 0、[* * * * 0 * * * * *]
- * 1、[* * * 0 0 0 * * * *]
+ * 1、[* * * * 0 0 0 * * *]
  * 2、[* * * * * * * * * *]
  * 
- * 90度(x: 4, y: 1)
+ * 90度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
- * 0、[* * * * 0 * * * * *]
- * 1、[* * * * 0 0 * * * *]
- * 2、[* * * * 0 * * * * *]
+ * 0、[* * * * * 0 0 * * *]
+ * 1、[* * * * * 0 * * * *]
+ * 2、[* * * * * 0 * * * *]
  * 3、[* * * * * * * * * *]
+ * x y
+ * 5 1
  * 
- * 180度(x: 4, y: 1)
+ * 180度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
  * 0、[* * * * * * * * * *]
- * 1、[* * * 0 0 0 * * * *]
- * 2、[* * * * 0 * * * * *]
+ * 1、[* * * * 0 0 0 * * *]
+ * 2、[* * * * * * 0 * * *]
  * 3、[* * * * * * * * * *]
+ * x y
+ * 5 1
  *
- * 270度(x: 4, y: 1)
+ * 270度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
- * 0、[* * * * 0 * * * * *]
- * 1、[* * * 0 0 * * * * *]
- * 2、[* * * * 0 * * * * *]
+ * 0、[* * * * * 0 * * * *]
+ * 1、[* * * * * 0 * * * *]
+ * 2、[* * * * 0 0 * * * *]
  * 3、[* * * * * * * * * *]
+ * x y
+ * 5 1
  */
 
 class GridType6 extends FallGrid {
   // 初始坐标(以中心点为初始坐标)
-  x: number = 4;
+  x: number = 5;
   y: number = 1;
 
   /**
@@ -130,7 +136,7 @@ class GridType6 extends FallGrid {
     switch (angle) {
       case 0: {
         const point1 = {
-          x,
+          x: x - 1,
           y: y - 1
         };
         const point2 = {
@@ -154,11 +160,11 @@ class GridType6 extends FallGrid {
           y: y - 1
         };
         const point2 = {
-          x,
-          y
+          x: x + 1,
+          y: y - 1
         };
         const point3 = {
-          x: x + 1,
+          x,
           y
         };
         const point4 = {
@@ -182,7 +188,7 @@ class GridType6 extends FallGrid {
           y
         };
         const point4 = {
-          x,
+          x: x + 1,
           y: y + 1
         };
         ret = [point1, point2, point3, point4];
@@ -194,12 +200,12 @@ class GridType6 extends FallGrid {
           y: y - 1
         };
         const point2 = {
-          x: x - 1,
+          x,
           y
         };
         const point3 = {
-          x,
-          y
+          x: x - 1,
+          y: y + 1
         };
         const point4 = {
           x,
