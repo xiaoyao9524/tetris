@@ -26,6 +26,9 @@ import {
  * 2、[* * * * * * * * * *]
  * x y
  * 5 1
+ * 4 2 p1
+ * 5 2
+ * 6 2
  * 
  * 90度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -33,6 +36,10 @@ import {
  * 1、[* * * * * 0 * * * *]
  * 2、[* * * * * 0 * * * *]
  * 3、[* * * * * * * * * *]
+ * x y
+ * 5 1
+ * 5 3 p1
+ * 6 1
  * 
  * 180度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -40,6 +47,11 @@ import {
  * 1、[* * * * 0 0 0 * * *]
  * 2、[* * * * * * 0 * * *]
  * 3、[* * * * * * * * * *]
+ * x y
+ * 5 1
+ * 4 2 p1
+ * 5 2
+ * 6 3
  *
  * 270度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -47,7 +59,12 @@ import {
  * 1、[* * * * * 0 * * * *]
  * 2、[* * * * 0 0 * * * *]
  * 3、[* * * * * * * * * *]
+ * x y
+ * 5 1
+ * 4 3 p1
+ * 5 3
  */
+
 
 class GridType6 extends FallGrid {
   // 初始坐标(以中心点为初始坐标)
@@ -266,21 +283,21 @@ class GridType6 extends FallGrid {
       }
       case 90: {
         const checkPoint1 = gameStatus[y + 2][x];
-        const checkPoint2 = gameStatus[y + 1][x + 1];
+        const checkPoint2 = gameStatus[y][x + 1];
 
         checkPointList = [checkPoint1, checkPoint2];
         break
       }
       case 180: {
         const checkPoint1 = gameStatus[y + 1][x - 1];
-        const checkPoint2 = gameStatus[y + 2][x];
-        const checkPoint3 = gameStatus[y + 1][x + 1];
+        const checkPoint2 = gameStatus[y + 1][x];
+        const checkPoint3 = gameStatus[y + 2][x + 1];
 
         checkPointList = [checkPoint1, checkPoint2, checkPoint3];
         break
       }
       case 270: {
-        const checkPoint1 = gameStatus[y + 1][x - 1];
+        const checkPoint1 = gameStatus[y + 2][x - 1];
         const checkPoint2 = gameStatus[y + 2][x];
 
         checkPointList = [checkPoint1, checkPoint2];

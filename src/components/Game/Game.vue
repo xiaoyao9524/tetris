@@ -67,7 +67,29 @@ import GridPreview from "./components/GridPreview.vue";
 const testDown = ref(true);
 
 // 游戏状态
-const gameStatus = ref<GameStatus>([]);
+// const gameStatus = ref<GameStatus>([]);
+const gameStatus = ref<GameStatus>([
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+]);
 
 // 行数和列数
 const rowCount = ref(20);
@@ -77,7 +99,7 @@ const colCount = ref(10);
 const fallInterval = ref(600);
 
 // 初始化游戏状态
-gameStatus.value = createGameStatus(rowCount.value, colCount.value);
+// gameStatus.value = createGameStatus(rowCount.value, colCount.value);
 
 const lookGameStatus = () => {
   console.log("gameStatus: ", gameStatus.value);
