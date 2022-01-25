@@ -24,6 +24,8 @@ import {
  * 0、[* * * * 0 * * * * *]
  * 1、[* * * * 0 0 0 * * *]
  * 2、[* * * * * * * * * *]
+ * x y
+ * 5 1
  * 
  * 90度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -31,8 +33,6 @@ import {
  * 1、[* * * * * 0 * * * *]
  * 2、[* * * * * 0 * * * *]
  * 3、[* * * * * * * * * *]
- * x y
- * 5 1
  * 
  * 180度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -40,8 +40,6 @@ import {
  * 1、[* * * * 0 0 0 * * *]
  * 2、[* * * * * * 0 * * *]
  * 3、[* * * * * * * * * *]
- * x y
- * 5 1
  *
  * 270度(x: 5, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -49,8 +47,6 @@ import {
  * 1、[* * * * * 0 * * * *]
  * 2、[* * * * 0 0 * * * *]
  * 3、[* * * * * * * * * *]
- * x y
- * 5 1
  */
 
 class GridType6 extends FallGrid {
@@ -70,8 +66,11 @@ class GridType6 extends FallGrid {
 
     const gameHeight = gameStatus.length - 1;
 
+    // 是否已经到了最后一格
+    const isDownMost = y >= gameHeight;
+
     // 如果中心点已经到了最后一行，那么不允许旋转
-    if (y >= gameHeight) {
+    if (isDownMost) {
       return false;
     }
 
@@ -84,27 +83,39 @@ class GridType6 extends FallGrid {
 
     switch (angle) {
       case 0: {
-        const checkPoint1 = gameStatus[y + 1][x];
+        const checkPoint1 = gameStatus[y - 1][x];
+        const checkPoint2 = gameStatus[y - 1][x + 1];
+        const checkPoint3 = gameStatus[y + 1][x + 1];
+        const checkPoint4 = gameStatus[y + 1][x];
 
-        checkList = [checkPoint1];
+        checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
         break;
       }
       case 90: {
-        const checkPoint1 = gameStatus[y][x - 1];
+        const checkPoint1 = gameStatus[y][x + 1];
+        const checkPoint2 = gameStatus[y + 1][x + 1];
+        const checkPoint3 = gameStatus[y + 1][x - 1];
+        const checkPoint4 = gameStatus[y][x - 1];
 
-        checkList = [checkPoint1];
+        checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
         break;
       }
       case 180: {
-        const checkPoint1 = gameStatus[y][x - 1];
+        const checkPoint1 = gameStatus[y - 1][x - 1];
+        const checkPoint2 = gameStatus[y - 1][x];
+        const checkPoint3 = gameStatus[y + 1][x];
+        const checkPoint4 = gameStatus[y + 1][x - 1];
 
-        checkList = [checkPoint1];
+        checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
         break;
       }
       case 270: {
-        const checkPoint1 = gameStatus[y][x + 1];
+        const checkPoint1 = gameStatus[y - 1][x + 1];
+        const checkPoint2 = gameStatus[y][x + 1];
+        const checkPoint3 = gameStatus[y][x - 1];
+        const checkPoint4 = gameStatus[y - 1][x - 1];
 
-        checkList = [checkPoint1];
+        checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
         break;
       }
     }
@@ -222,7 +233,7 @@ class GridType6 extends FallGrid {
   checkCreateSuccess(gameStatus: GameStatus): boolean {
     const { x, y } = this;
 
-    const checkPoint1 = gameStatus[y - 1][x];
+    const checkPoint1 = gameStatus[y - 1][x - 1];
     const checkPoint2 = gameStatus[y][x - 1];
     const checkPoint3 = gameStatus[y][x];
     const checkPoint4 = gameStatus[y][x + 1];
