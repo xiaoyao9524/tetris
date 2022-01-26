@@ -27,8 +27,9 @@ import {
  * x y
  * 4 1
  * 
- * 6 0
- * 6 1
+ * 3 2
+ * 4 2
+ * 5 2
  * 
  * 90度(x: 4, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -39,9 +40,8 @@ import {
  * x y
  * 4 1 
  * 
- * 5 0
- * 5 1
- * 6 2
+ * 4 3
+ * 5 3
  * 
  * 180度(x: 4, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -52,8 +52,9 @@ import {
  * x y
  * 4 1
  * 
- * 6 1
+ * 3 3
  * 4 2
+ * 5 2
  *
  * 270度(x: 4, y: 1)
  *     0 1 2 3 4 5 6 7 8 9
@@ -64,9 +65,8 @@ import {
  * x y
  * 4 1
  * 
- * 5 0
- * 5 1
- * 5 2
+ * 3 1
+ * 4 3
  */
 
 
@@ -114,19 +114,20 @@ class GridType7 extends FallGrid {
         break;
       }
       case 90: {
-        const checkPoint1 = gameStatus[y][x + 1];
-        const checkPoint2 = gameStatus[y + 1][x + 1];
-        const checkPoint3 = gameStatus[y + 1][x - 1];
-        const checkPoint4 = gameStatus[y][x - 1];
+        const checkPoint1 = gameStatus[y - 1][x + 1];
+        const checkPoint2 = gameStatus[y][x + 1];
+        const checkPoint3 = gameStatus[y][x - 1];
+        const checkPoint4 = gameStatus[y + 1][x - 1];
 
         checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
         break;
       }
       case 180: {
+        // 此处逻辑已完成，先去完成向下逻辑后再验收
         const checkPoint1 = gameStatus[y - 1][x - 1];
         const checkPoint2 = gameStatus[y - 1][x];
         const checkPoint3 = gameStatus[y + 1][x];
-        const checkPoint4 = gameStatus[y + 1][x - 1];
+        const checkPoint4 = gameStatus[y + 1][x + 1];
 
         checkList = [checkPoint1, checkPoint2, checkPoint3, checkPoint4];
         break;
@@ -289,21 +290,21 @@ class GridType7 extends FallGrid {
       }
       case 90: {
         const checkPoint1 = gameStatus[y + 2][x];
-        const checkPoint2 = gameStatus[y][x + 1];
+        const checkPoint2 = gameStatus[y + 2][x + 1];
 
         checkPointList = [checkPoint1, checkPoint2];
         break
       }
       case 180: {
-        const checkPoint1 = gameStatus[y + 1][x - 1];
+        const checkPoint1 = gameStatus[y + 2][x - 1];
         const checkPoint2 = gameStatus[y + 1][x];
-        const checkPoint3 = gameStatus[y + 2][x + 1];
+        const checkPoint3 = gameStatus[y + 1][x + 1];
 
         checkPointList = [checkPoint1, checkPoint2, checkPoint3];
         break
       }
       case 270: {
-        const checkPoint1 = gameStatus[y + 2][x - 1];
+        const checkPoint1 = gameStatus[y][x - 1];
         const checkPoint2 = gameStatus[y + 2][x];
 
         checkPointList = [checkPoint1, checkPoint2];
