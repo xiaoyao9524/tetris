@@ -13,6 +13,7 @@ import GridType3 from './grid/GridType3';
 import GridType4 from './grid/GridType4';
 import GridType5 from './grid/GridType5';
 import GridType6 from './grid/GridType6';
+import GridType7 from './grid/GridType7';
 
 /**
  * 下落的格子类型：
@@ -75,7 +76,7 @@ export const createFallElement = (): FallGrid => {
   //     grid = new GridType4();
   // }
 
-  grid = new GridType6()
+  grid = new GridType7()
 
   return grid;
 }
