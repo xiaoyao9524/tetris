@@ -25,11 +25,6 @@ import {
  * 1、[* * * * 0 0 * * * *]
  * 2、[* * * * * * * * * *]
  * 3、[* * * * * * * * * *]
- * x y
- * 4 1
- * 
- * 5 0
- * 6 1
  * 
  * 180度
  * *   0 1 2 3 4 5 6 7 8 9
@@ -37,13 +32,6 @@ import {
  * 1、[* * * * 0 0 * * * *]
  * 2、[* * * * 0 * * * * *]
  * 3、[* * * * * * * * * *]
- * x y
- * 4 1
- * 
- * 6 0
- * 6 1
- * 5 2
- * 
  */
 
 class GridType2 extends FallGrid{
@@ -75,24 +63,31 @@ class GridType2 extends FallGrid{
     
     if (isNormalAngle) {
       // 普通转竖
-      const checkPoint1 = gameStatus[y + 1][x];
-      const checkPoint2 = gameStatus[y + 2][x];
+      const checkPoint1 = gameStatus[y - 1][x + 1];
+      const checkPoint2 = gameStatus[y + 1][x];
+      const checkPoint3 = gameStatus[y + 1][x + 1];
 
-      checkList = [checkPoint1, checkPoint2];
+      checkList = [checkPoint1, checkPoint2, checkPoint3];
     } else {
       // 竖转普通
-      const checkPoint1 = gameStatus[y][x];
-      const checkPoint2 = gameStatus[y + 1][x + 2];
+      const gameWidth = gameStatus[0].length - 1;
+      // 如果在最左侧或最右侧，不允许旋转
+      if (x <= 0) {
+        return false
+      }
+      const checkPoint1 = gameStatus[y - 1][x - 1];
+      const checkPoint2 = gameStatus[y - 1][x];
+      const checkPoint3 = gameStatus[y + 1][x + 1];
 
-      checkList = [checkPoint1, checkPoint2];
+      checkList = [checkPoint1, checkPoint2, checkPoint3];
     }
 
     return !checkList.includes(1);
   }
 
   rotate(gameStatus: GameStatus): GridPoint[] | null {
-    const { x, y } = this;
-    const angle = ((this.angle / 180 + 1) % 2) * 180;
+    const { x, y, angle } = this;
+    const newAngle = ((this.angle / 180 + 1) % 2) * 180;
     const gameWidth = gameStatus[0].length - 1;
 
     const isAllowRotate = this.checkToRotate(gameStatus);
@@ -101,6 +96,7 @@ class GridType2 extends FallGrid{
       return null;
     }
 
+    /*
     if (angle === 0) {
       // 从竖的转成普通
       
@@ -120,8 +116,9 @@ class GridType2 extends FallGrid{
         this.x++;
       }
     }
+    */
 
-    this.angle = angle;
+    this.angle = newAngle;
 
     return this.getCurrentPosition();
   }
