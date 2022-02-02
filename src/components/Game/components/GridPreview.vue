@@ -3,7 +3,7 @@
     <div class="grid-container">
       <div 
         class="grid-row"
-        v-for="(row, rowIndex) in gridStatus"
+        v-for="(row, rowIndex) in props.grid.getPreview()"
         :key="rowIndex"
       >
         <div 
@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { FallGrid } from '../utils/grid/GridType';
 
 interface Props {
@@ -28,8 +27,6 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-
-const gridStatus = ref<number[][]>(props.grid.getPreview())
 
 </script>
 

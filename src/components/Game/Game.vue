@@ -18,7 +18,7 @@
       <div class="game-info">
         <div class="info-item">
           <p class="label">分数</p>
-          <p class="value">20</p>
+          <p class="value">{{score}}</p>
         </div>
 
         <div class="info-item">
@@ -30,7 +30,7 @@
 
         <div>
           <!-- <button @click="lookGameStatus">查看游戏状态</button> -->
-          <button @click="handlerFallMoment">下落一行</button>
+          <button v-if="testDown" @click="handlerFallMoment">下落一行</button>
         </div>
       </div>
     </div>
@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 // util
 import { createGameStatus, createFallElement } from "./utils/gameUtils";
 
@@ -63,6 +63,12 @@ import { FallGrid } from "./utils/grid/GridType";
 
 // component
 import GridPreview from "./components/GridPreview.vue";
+
+const emit = defineEmits<{
+  (e: 'scoreChange', value: number): void;
+}>();
+
+const score = ref(0);
 
 const testDown = ref(false);
 
@@ -98,7 +104,7 @@ const rowCount = ref(20);
 const colCount = ref(10);
 
 // 下落间隔(ms)
-const fallInterval = ref(600);
+const fallInterval = ref(400);
 
 // 初始化游戏状态
 gameStatus.value = createGameStatus(rowCount.value, colCount.value);
@@ -148,13 +154,14 @@ const handlerFallDone = () => {
 
 // 检查是否有消除的行
 const checkRowClear = () => {
+  /*
   let mapStr = ``;
 
   for (const row of gameStatus.value) {
     mapStr += row.join(" ") + "\n";
   }
   console.log(mapStr);
-
+  */
   let clearRowCount = 0;
 
   for (let i = 0; i < gameStatus.value.length; i++) {
@@ -173,7 +180,12 @@ const checkRowClear = () => {
     }
   }
 
-  console.log(`此次共消除了${clearRowCount}行`);
+  // console.log(`此次共消除了${clearRowCount}行`);
+  const newScore = score.value + (clearRowCount === 4 ? 50 : (clearRowCount * 10));
+
+  score.value = newScore;
+
+  emit('scoreChange', newScore);
 };
 
 // 每次下落时触发
@@ -267,7 +279,6 @@ const handlerToRight = () => {
   clearFallEl();
 
   fallElBeforePoint.value = moveResult;
-  // console.log("此次（向右）移动结果：", fallElBeforePoint.value);
 
   // 显示最新的位置
   renderFallEl();

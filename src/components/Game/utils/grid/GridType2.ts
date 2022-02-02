@@ -316,8 +316,8 @@ class GridType2 extends FallGrid{
   /** 获取预览数据 */
   getPreview () {
     return [
-      [0, 1, 1, 0, 0],
-      [0, 0, 1, 1, 0]
+      [1, 1, 0],
+      [0, 1, 1]
     ]
   }
 }
