@@ -64,10 +64,11 @@ import { FallGrid } from "./utils/grid/GridType";
 // component
 import GridPreview from "./components/GridPreview.vue";
 
-const testDown = ref(true);
+const testDown = ref(false);
 
 // 游戏状态
-// const gameStatus = ref<GameStatus>([]);
+const gameStatus = ref<GameStatus>([]);
+/*
 const gameStatus = ref<GameStatus>([
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -90,6 +91,7 @@ const gameStatus = ref<GameStatus>([
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]);
+*/
 
 // 行数和列数
 const rowCount = ref(20);
@@ -99,12 +101,7 @@ const colCount = ref(10);
 const fallInterval = ref(600);
 
 // 初始化游戏状态
-// gameStatus.value = createGameStatus(rowCount.value, colCount.value);
-
-const lookGameStatus = () => {
-  console.log("gameStatus: ", gameStatus.value);
-  console.log(gameStatus.value.map((i) => i.length));
-};
+gameStatus.value = createGameStatus(rowCount.value, colCount.value);
 
 // 创建下落元素(此次创建就不用检查是否创建成功了，必定会成功)
 const fallEl = ref<FallGrid>(createFallElement());
@@ -129,6 +126,7 @@ const renderFallEl = () => {
 
   for (const point of fallPosition) {
     const { x, y } = point;
+    
     gameStatus.value[y][x] = 2;
   }
 
@@ -150,8 +148,6 @@ const handlerFallDone = () => {
 
 // 检查是否有消除的行
 const checkRowClear = () => {
-  // console.clear();
-  // console.log("检查是否有消除的行: ");
   let mapStr = ``;
 
   for (const row of gameStatus.value) {
@@ -186,18 +182,14 @@ const handlerFallMoment = () => {
 
   if (!toNextLineResult) {
     /** 无法再下落 */
-    // console.log("此行已落到底");
-    // fallElBeforePoint.value = [];
     handlerFallDone();
 
     // 检查是否有可以消除的行
     checkRowClear();
 
     // 生成下一个下落元素
-    // fallEl.value = createFallElement();
     fallEl.value = nextFallEl.value;
     const isCreateSuccess = fallEl.value.checkCreateSuccess(gameStatus.value);
-    // console.log("是否生成成功：", isCreateSuccess);
 
     if (isCreateSuccess) {
       renderFallEl();
@@ -252,8 +244,6 @@ const handlerRotate = () => {
 const handlerToLeft = () => {
   const moveResult = fallEl.value.toLeft(gameStatus.value);
 
-  console.log("向左移动结果：", moveResult);
-
   if (!moveResult) {
     return;
   }
@@ -261,7 +251,6 @@ const handlerToLeft = () => {
   clearFallEl();
 
   fallElBeforePoint.value = moveResult;
-  // console.log("此次（向左）移动结果：", fallElBeforePoint.value);
 
   // 显示最新的位置
   renderFallEl();

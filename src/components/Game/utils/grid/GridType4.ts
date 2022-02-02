@@ -136,7 +136,6 @@ class GridType4 extends FallGrid {
 
     if (!isHorizontal) {
       // 横，要转成竖
-      console.log('横，要转成竖: ', gameStatus);
       const checkPoint1 = gameStatus[y + 1][x - 2];
       const checkPoint2 = gameStatus[y + 2][x - 1];
       const checkPoint3 = gameStatus[y - 1][x];
@@ -156,7 +155,6 @@ class GridType4 extends FallGrid {
       ];
     } else {
       // 竖，要转成横
-      console.log('竖，要转成横');
       const checkPoint1 = gameStatus[y + 2][x - 1];
       const checkPoint2 = gameStatus[y + 1][x - 2];
       const checkPoint3 = gameStatus[y + 1][x - 1];
