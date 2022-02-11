@@ -348,3 +348,4 @@ class GridType4 extends FallGrid {
 }
 
 export default GridType4;
+  
