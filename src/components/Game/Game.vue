@@ -301,9 +301,9 @@ const handlerToRight = () => {
 
     .game-container {
       flex: 0 0 auto;
-      margin-right: 5px;
+      /* margin-right: 5px; */
       border: 2px solid #000;
-      border-bottom: none;
+      /* border-bottom: none; */
       .game-row {
         display: flex;
         height: 30px;
@@ -316,8 +316,8 @@ const handlerToRight = () => {
           font-size: 12px;
           /* border: 1px solid #000; */
           /* border-left: 1px solid #000; */
-          border-right: 2px solid #000;
-          border-bottom: 2px solid #000;
+          /* border-right: 2px solid #000;
+          border-bottom: 2px solid #000; */
           box-sizing: border-box;
           /* &:nth-of-type(1) { */
           /* border-left: none; */
