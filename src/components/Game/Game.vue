@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits, reactive } from "vue";
+import { ref, defineEmits, reactive, onMounted, onBeforeUnmount } from "vue";
 // util
 import { createGameStatus, createFallElement } from "./utils/gameUtils";
 
@@ -331,6 +331,36 @@ const handlerTouchEnd = (e: TouchEvent) => {
     verticalMoveDistance < 0 ? handlerRotate() : console.log("down");
   }
 };
+
+// 键盘操作
+/**
+  ArrowUp
+  ArrowDown
+  ArrowLeft
+  ArrowRight
+*/
+
+const keyDownHandler = (e: KeyboardEvent) => {
+  switch (e.key) {
+    case 'ArrowUp':
+      handlerRotate();
+      break
+    case 'ArrowLeft':
+      handlerToLeft();
+      break;
+    case 'ArrowRight':
+      handlerToRight();
+      break
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("keydown", keyDownHandler);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("keydown", keyDownHandler);
+});
 </script>
 
 <style scoped lang="scss">
