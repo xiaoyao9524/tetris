@@ -38,16 +38,16 @@ const props = defineProps<Props>();
     flex: 0 0 auto;
     .grid-row {
       display: flex;
-      /* border-top: 1px solid #000;
-      border-left: 1px solid #000; */
+      border-top: 1px solid #000;
+      border-left: 1px solid #000;
       &:nth-last-of-type(1) {
-        /* border-bottom: 1px solid #000; */
+        border-bottom: 1px solid #000;
       }
       .grid-col {
         flex: 0 0 auto;
         width: 16px;
         height: 16px;
-        /* border-right: 1px solid #000; */
+        border-right: 1px solid #000;
         /* border-bottom: 1px solid #000; */
         &.fill {
           background: #409eff;

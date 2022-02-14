@@ -1,5 +1,5 @@
 <template>
-  <div class="game-page">
+  <div class="game-page" @touchstart="handlerTouchStart" @touchend="handlerTouchEnd">
     <div class="main-game">
       <div class="game-container">
         <div class="game-row" v-for="(row, index) in gameStatus" :key="index">
@@ -18,7 +18,7 @@
       <div class="game-info">
         <div class="info-item">
           <p class="label">分数</p>
-          <p class="value">{{score}}</p>
+          <p class="value">{{ score }}</p>
         </div>
 
         <div class="info-item">
@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <div class="operation-container">
+    <div class="operation-container" v-if="false">
       <div class="operation-item" @click="handlerToLeft">
         <span class="icon-font">&#xe84b;</span>
       </div>
@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits } from "vue";
+import { ref, defineEmits, reactive } from "vue";
 // util
 import { createGameStatus, createFallElement } from "./utils/gameUtils";
 
@@ -65,7 +65,7 @@ import { FallGrid } from "./utils/grid/GridType";
 import GridPreview from "./components/GridPreview.vue";
 
 const emit = defineEmits<{
-  (e: 'scoreChange', value: number): void;
+  (e: "scoreChange", value: number): void;
 }>();
 
 const score = ref(0);
@@ -132,7 +132,7 @@ const renderFallEl = () => {
 
   for (const point of fallPosition) {
     const { x, y } = point;
-    
+
     gameStatus.value[y][x] = 2;
   }
 
@@ -154,14 +154,6 @@ const handlerFallDone = () => {
 
 // 检查是否有消除的行
 const checkRowClear = () => {
-  /*
-  let mapStr = ``;
-
-  for (const row of gameStatus.value) {
-    mapStr += row.join(" ") + "\n";
-  }
-  console.log(mapStr);
-  */
   let clearRowCount = 0;
 
   for (let i = 0; i < gameStatus.value.length; i++) {
@@ -181,11 +173,11 @@ const checkRowClear = () => {
   }
 
   // console.log(`此次共消除了${clearRowCount}行`);
-  const newScore = score.value + (clearRowCount === 4 ? 50 : (clearRowCount * 10));
+  const newScore = score.value + (clearRowCount === 4 ? 50 : clearRowCount * 10);
 
   score.value = newScore;
 
-  emit('scoreChange', newScore);
+  emit("scoreChange", newScore);
 };
 
 // 每次下落时触发
@@ -283,13 +275,70 @@ const handlerToRight = () => {
   // 显示最新的位置
   renderFallEl();
 };
+
+// 手势操作
+const isTouch = ref(false);
+
+const touchPoint = reactive({
+  clientX: 0,
+  clientY: 0,
+});
+
+const handlerTouchStart = (e: TouchEvent) => {
+  isTouch.value = true;
+
+  const { touches } = e;
+
+  if (!touches.length) {
+    return;
+  }
+
+  const touche = touches[0];
+
+  const { clientX, clientY } = touche;
+
+  touchPoint.clientX = clientX;
+  touchPoint.clientY = clientY;
+};
+
+const handlerTouchEnd = (e: TouchEvent) => {
+  isTouch.value = false;
+
+  const { changedTouches } = e;
+
+  if (!changedTouches.length) {
+    return;
+  }
+
+  const touche = changedTouches[0];
+
+  const { clientX, clientY } = touche;
+
+  const horizonMoveDistance = clientX - touchPoint.clientX;
+  const verticalMoveDistance = clientY - touchPoint.clientY;
+
+  const isHorizonMove = Math.abs(horizonMoveDistance) > Math.abs(verticalMoveDistance);
+
+  if (isHorizonMove) {
+    if (Math.abs(horizonMoveDistance) < 30) {
+      return;
+    }
+    horizonMoveDistance < 0 ? handlerToLeft() : handlerToRight();
+  } else {
+    if (Math.abs(verticalMoveDistance) < 30) {
+      return;
+    }
+    verticalMoveDistance < 0 ? handlerRotate() : console.log("down");
+  }
+};
 </script>
 
 <style scoped lang="scss">
 .game-page {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
+  /* align-items: center; */
   height: 100vh;
 
   .main-game {
@@ -297,13 +346,14 @@ const handlerToRight = () => {
     display: flex;
     padding: 5px;
     width: 100vw;
+    max-width: 400px;
     box-sizing: border-box;
 
     .game-container {
       flex: 0 0 auto;
       /* margin-right: 5px; */
-      border: 2px solid #000;
-      /* border-bottom: none; */
+      border: 1px solid #000;
+      border-bottom: none;
       .game-row {
         display: flex;
         height: 30px;
@@ -316,12 +366,12 @@ const handlerToRight = () => {
           font-size: 12px;
           /* border: 1px solid #000; */
           /* border-left: 1px solid #000; */
-          /* border-right: 2px solid #000;
-          border-bottom: 2px solid #000; */
+          border-right: 1px solid #000;
+          border-bottom: 1px solid #000;
           box-sizing: border-box;
-          /* &:nth-of-type(1) { */
-          /* border-left: none; */
-          /* } */
+          &:nth-of-type(1) {
+            border-left: none;
+          }
           &:nth-last-of-type(1) {
             border-right: none;
           }

@@ -9,5 +9,8 @@
 </template>
 
 <style scoped lang="scss">
-
+/* .play {
+  margin: 0 auto;
+  max-width: 400px;
+} */
 </style>
