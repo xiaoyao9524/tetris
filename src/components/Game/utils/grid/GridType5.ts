@@ -4,7 +4,8 @@ import type {
 } from '../../types';
 
 import type {
-  GridPoint
+  GridPoint,
+  ToBottomResult
 } from './GridType';
 
 import {
@@ -134,8 +135,8 @@ class GridType5 extends FallGrid {
     return this.getCurrentPosition();
   }
 
-  getCurrentPosition(): GridPoint[] {
-    const { x, y, angle } = this;
+  getCurrentPosition(x: number = this.x, y: number = this.y): GridPoint[] {
+    const { angle } = this;
 
     let ret: GridPoint[] = [];
 
@@ -236,8 +237,8 @@ class GridType5 extends FallGrid {
     return ![checkPoint1, checkPoint2, checkPoint3, checkPoint4].includes(1);
   }
 
-  checkToNextLine(gameStatus: GameStatus): boolean {
-    const { x, y, angle } = this;
+  checkToNextLine(gameStatus: GameStatus, x: number = this.x, y: number = this.y): boolean {
+    const { angle } = this;
 
     const gameHeight = gameStatus.length - 1;
 
@@ -326,7 +327,7 @@ class GridType5 extends FallGrid {
         checkPointList = [checkPoint1, checkPoint2];
         break;
       }
-      case 90:{
+      case 90: {
         const checkPoint1 = gameStatus[y - 1][x - 1];
         const checkPoint2 = gameStatus[y][x - 1];
         const checkPoint3 = gameStatus[y + 1][x - 1];
@@ -334,14 +335,14 @@ class GridType5 extends FallGrid {
         checkPointList = [checkPoint1, checkPoint2, checkPoint3];
         break;
       }
-      case 180:{
+      case 180: {
         const checkPoint1 = gameStatus[y][x - 2];
         const checkPoint2 = gameStatus[y + 1][x - 1];
 
         checkPointList = [checkPoint1, checkPoint2];
         break;
       }
-      case 270:{
+      case 270: {
         const checkPoint1 = gameStatus[y - 1][x - 1];
         const checkPoint2 = gameStatus[y][x - 2];
         const checkPoint3 = gameStatus[y + 1][x - 1];
@@ -434,6 +435,31 @@ class GridType5 extends FallGrid {
     this.x++;
 
     return this.getCurrentPosition();
+  }
+
+  /** 去最底部 */
+  toBottom(gameStatus: GameStatus): ToBottomResult {
+    let { x, y } = this;
+    let currentPoints = this.getCurrentPosition(x, y);
+
+    let allowToNextLine = this.checkToNextLine(gameStatus, x, y);
+
+    while (allowToNextLine) {
+      y++;
+      currentPoints = this.getCurrentPosition(x, y);
+      allowToNextLine = this.checkToNextLine(gameStatus, x, y)
+    }
+
+    const ret = {
+      points: currentPoints,
+      x,
+      y
+    }
+
+    this.x = x;
+    this.y = y;
+
+    return ret;
   }
 
   /** 获取预览数据 */

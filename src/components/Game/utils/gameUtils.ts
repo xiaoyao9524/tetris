@@ -79,6 +79,6 @@ export const createFallElement = (): FallGrid => {
     grid = new GridType4();
   }
   */
-  grid = new GridType4();
+  grid = new GridType5();
   return grid;
 };
