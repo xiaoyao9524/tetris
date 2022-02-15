@@ -372,11 +372,13 @@ onBeforeUnmount(() => {
   height: 100vh;
 
   .main-game {
+    margin: 0 auto;
     flex: 0 0 auto;
     display: flex;
     padding: 5px;
+    /* padding: 0 0 0 5px; */
     width: 100vw;
-    max-width: 400px;
+    max-width: 375px;
     box-sizing: border-box;
 
     .game-container {
@@ -386,13 +388,13 @@ onBeforeUnmount(() => {
       border-bottom: none;
       .game-row {
         display: flex;
-        height: 30px;
+        height: 26px;
         box-sizing: border-box;
 
         .game-grid {
           flex: 0 0 auto;
-          width: 30px;
-          height: 30px;
+          width: 26px;
+          height: 26px;
           font-size: 12px;
           /* border: 1px solid #000; */
           /* border-left: 1px solid #000; */

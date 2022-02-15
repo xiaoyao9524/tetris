@@ -62,7 +62,7 @@ export const createFallElement = (): FallGrid => {
   const random = integer(1, 100)(nativeMath);
 
   let grid: FallGrid | null = null;
-
+  /*
   if (random >= 1 && random < 17) {
     grid = new GridType2();
   } else if (random >= 17 && random < 33) {
@@ -78,5 +78,7 @@ export const createFallElement = (): FallGrid => {
   } else {
     grid = new GridType4();
   }
+  */
+  grid = new GridType1();
   return grid;
 };
