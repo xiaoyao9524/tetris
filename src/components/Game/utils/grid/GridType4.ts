@@ -1,6 +1,6 @@
 import type { GridStatus, GameStatus } from '../../types';
 
-import type { GridPoint } from './GridType';
+import type { GridPoint, ToBottomResult } from './GridType';
 
 import { FallGrid } from './GridType';
 
@@ -57,8 +57,8 @@ class GridType4 extends FallGrid {
    */
   private angle: number = 0;
 
-  getCurrentPosition(): GridPoint[] {
-    const { x, y, angle } = this;
+  getCurrentPosition(x: number = this.x, y: number = this.y): GridPoint[] {
+    const { angle } = this;
 
     let ret: GridPoint[] = [];
 
@@ -200,8 +200,8 @@ class GridType4 extends FallGrid {
     return ![checkPoint1, checkPoint2, checkPoint3, checkPoint4].includes(1);
   }
 
-  checkToNextLine(gameStatus: GameStatus): boolean {
-    const { x, y, angle } = this;
+  checkToNextLine(gameStatus: GameStatus, x: number = this.x, y: number = this.y): boolean {
+    const { angle } = this;
 
     let checkPointList: GridStatus[] = [];
 
@@ -336,6 +336,31 @@ class GridType4 extends FallGrid {
     return this.getCurrentPosition();
   }
 
+  /** 去最底部 */
+  toBottom(gameStatus: GameStatus): ToBottomResult {
+    let { x, y } = this;
+    let currentPoints = this.getCurrentPosition(x, y);
+
+    let allowToNextLine = this.checkToNextLine(gameStatus, x, y);
+
+    while (allowToNextLine) {
+      y++;
+      currentPoints = this.getCurrentPosition(x, y);
+      allowToNextLine = this.checkToNextLine(gameStatus, x, y)
+    }
+
+    const ret = {
+      points: currentPoints,
+      x,
+      y
+    }
+
+    this.x = x;
+    this.y = y;
+
+    return ret;
+  }
+
   /** 获取预览数据 */
   getPreview() {
     return [
@@ -348,4 +373,3 @@ class GridType4 extends FallGrid {
 }
 
 export default GridType4;
-  

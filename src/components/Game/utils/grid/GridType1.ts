@@ -73,8 +73,6 @@ class GridType1 extends FallGrid {
     return ![checkPoint1, checkPoint2, checkPoint3, checkPoint4].includes(1);
   }
 
-
-
   /** 向左移动 */
   checkToLeft(gameStatus: GameStatus): boolean {
     const { x, y } = this;
