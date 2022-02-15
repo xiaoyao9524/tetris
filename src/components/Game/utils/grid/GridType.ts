@@ -7,6 +7,12 @@ export interface GridProps {
   y: number;
 }
 
+export interface ToBottomResult {
+  points: GridPoint[];
+  x: number;
+  y: number;
+}
+
 // 每个格子类要有的属性
 export abstract class FallGrid {
   abstract x: number;
@@ -23,6 +29,7 @@ export abstract class FallGrid {
   abstract toRight(gameStatus: GameStatus): GridPoint[] | null;
   abstract getCurrentPosition(): GridPoint[];
   abstract getPreview(): number[][];
+  abstract toBottom(gameStatus: GameStatus): ToBottomResult;
 }
 
 export interface GridPoint {

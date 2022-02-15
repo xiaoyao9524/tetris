@@ -3,7 +3,8 @@ import type {
 } from '../../types';
 
 import type {
-  GridPoint
+  GridPoint,
+  ToBottomResult
 } from './GridType';
 
 import {
@@ -37,8 +38,9 @@ class GridType1 extends FallGrid{
   }
 
   // 获取当前各点坐标
-  getCurrentPosition (): GridPoint[] {
-    const {x, y} = this;
+  getCurrentPosition (x: number = this.x, y: number = this.y): GridPoint[] {
+    // const {x, y} = this;
+
     const point1: GridPoint = {
       x,
       y
@@ -74,9 +76,9 @@ class GridType1 extends FallGrid{
   }
 
   /** 向下 */
-  checkToNextLine (gameStatus: GameStatus): boolean {
+  checkToNextLine (gameStatus: GameStatus, x: number = this.x, y: number = this.y): boolean {
     // 检查是否可以下落
-    const { x, y } = this;
+    // const { x, y } = this;
 
     // 检查是否已到最后一行
     const isLastRow = y + 1 >= gameStatus.length - 1;
@@ -157,6 +159,33 @@ class GridType1 extends FallGrid{
     this.x++;
 
     return this.getCurrentPosition();
+  }
+
+  /** 去最底部 */
+  toBottom (gameStatus: GameStatus): ToBottomResult {
+    let { x, y } = this;
+    let currentPoints = this.getCurrentPosition(x, y);
+
+    let allowToNextLine = this.checkToNextLine(gameStatus, x, y);
+
+    while (allowToNextLine) {
+      y++;
+      currentPoints = this.getCurrentPosition(x, y);
+      allowToNextLine = this.checkToNextLine(gameStatus, x, y)
+    }
+
+    const ret = {
+      points: currentPoints,
+      x,
+      y
+    }
+
+    this.x = x;
+    this.y = y;
+
+    console.log(ret);
+
+    return ret;
   }
   
   /** 获取预览数据 */
