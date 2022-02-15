@@ -3,6 +3,7 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { onMounted } from "vue";
 
+// 阻止IOS橡皮筋效果
 onMounted(() => {
   document.body.addEventListener(
     "touchmove",

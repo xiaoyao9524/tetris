@@ -71,11 +71,12 @@ const emit = defineEmits<{
 const score = ref(0);
 
 // 测试下落逻辑
-const testDown = ref(true);
+const testDown = ref(false);
 
 // 游戏状态
-// const gameStatus = ref<GameStatus>([]);
+const gameStatus = ref<GameStatus>([]);
 
+/*
 const gameStatus = ref<GameStatus>([
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -98,7 +99,7 @@ const gameStatus = ref<GameStatus>([
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]);
-
+*/
 
 // 行数和列数
 const rowCount = ref(20);
@@ -108,7 +109,7 @@ const colCount = ref(10);
 const fallInterval = ref(400);
 
 // 初始化游戏状态
-// gameStatus.value = createGameStatus(rowCount.value, colCount.value);
+gameStatus.value = createGameStatus(rowCount.value, colCount.value);
 
 // 创建下落元素(此次创建就不用检查是否创建成功了，必定会成功)
 const fallEl = ref<FallGrid>(createFallElement());
