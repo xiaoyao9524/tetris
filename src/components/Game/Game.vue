@@ -279,17 +279,11 @@ const handlerToRight = () => {
 
 // 向下
 const handlerToBottom = () => {
-  const toBottomRes = fallEl.value.toBottom(gameStatus.value);
-
-  console.log('toBottomRes: ', toBottomRes)
-
-  // if (!points) {
-  //   return;
-  // }
+  const { points } = fallEl.value.toBottom(gameStatus.value);
 
   clearFallEl();
 
-  // fallElBeforePoint.value = points;
+  fallElBeforePoint.value = points;
 
   // 显示最新的位置
   renderFallEl();
@@ -347,7 +341,7 @@ const handlerTouchEnd = (e: TouchEvent) => {
     if (Math.abs(verticalMoveDistance) < 30) {
       return;
     }
-    verticalMoveDistance < 0 ? handlerRotate() : console.log("down");
+    verticalMoveDistance < 0 ? handlerRotate() : handlerToBottom();
   }
 };
 
