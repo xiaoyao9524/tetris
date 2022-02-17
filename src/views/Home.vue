@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { ref, computed } from "vue";
-import MyList from "@/components/List.vue";
-import Foo from "@/components/Foo.vue";
-import Bar from "@/components/Bar.vue";
-import Baz from "@/components/Baz.vue";
+import { useStore } from 'vuex';
+import { key } from '@/store';
+// import MyList from "@/components/List.vue";
+// import Foo from "@/components/Foo.vue";
+// import Bar from "@/components/Bar.vue";
+// import Baz from "@/components/Baz.vue";
 
 const router = useRouter();
 
-const count = ref(0);
+const store = useStore(key);
+
+// const count = ref(0);
 
 // const RenderComponent = computed(() => {
 //   const c = count.value % 3;
@@ -22,17 +26,22 @@ const count = ref(0);
 //   }
 // })
 
+// const localHighScore = localStorage.getItem('height-score');
+
+// const highScore = ref(localHighScore || 0);
+const highScore = computed(() => store.state.game.highScore);
+
 const startGame = () => {
   router.push("/play");
 };
 
-const handlerChange = (val: string) => {
-  console.log("change触发：", val);
-};
+// const handlerChange = (val: string) => {
+//   console.log("change触发：", val);
+// };
 
-const handlerConfirm = (val: string) => {
-  console.log("confirm触发：", val);
-};
+// const handlerConfirm = (val: string) => {
+//   console.log("confirm触发：", val);
+// };
 </script>
 
 <template>
@@ -40,7 +49,7 @@ const handlerConfirm = (val: string) => {
     <div class="menu-container">
       <h3 class="title">俄罗斯方块</h3>
 
-      <p class="hight-score">历史最高：0</p>
+      <p class="hight-score">历史最高：{{highScore}}</p>
 
       <div class="btn-item" @click="startGame">开始游戏</div>
     </div>

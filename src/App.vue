@@ -2,6 +2,14 @@
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import { onMounted } from "vue";
+import { useStore } from 'vuex';
+import { key } from '@/store';
+
+const store = useStore(key);
+
+const localHighScore = localStorage.getItem('high-score');
+
+store.commit('game/setHighScore', localHighScore ? Number(localHighScore) : 0);
 
 // 阻止IOS橡皮筋效果
 onMounted(() => {

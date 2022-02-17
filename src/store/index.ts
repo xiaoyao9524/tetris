@@ -3,6 +3,7 @@ import { createStore, Store } from 'vuex';
 
 // modules
 import count from './modules/count';
+import game from './modules/game';
 
 // types
 import {State as IState} from '@/types/store';
@@ -13,6 +14,7 @@ export const key: InjectionKey<Store<State>> = Symbol()
 
 export const store = createStore({
   modules: {
-    count
+    count,
+    game
   }
 })

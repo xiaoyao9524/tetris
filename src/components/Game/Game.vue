@@ -17,6 +17,11 @@
 
       <div class="game-info">
         <div class="info-item">
+          <p class="label">历史高分</p>
+          <p class="value">{{ highScore }}</p>
+        </div>
+
+        <div class="info-item">
           <p class="label">分数</p>
           <p class="value">{{ score }}</p>
         </div>
@@ -27,6 +32,10 @@
             <GridPreview :grid="nextFallEl" />
           </div>
         </div>
+
+        <!-- <div>
+          <button @click="reStart">重新开始</button>
+        </div> -->
 
         <div>
           <!-- <button @click="lookGameStatus">查看游戏状态</button> -->
@@ -46,11 +55,24 @@
         <span class="icon-font" @click="handlerToRight">&#xe84a;</span>
       </div>
     </div>
+
+    <div class="game-over-container" v-show="isGameOver">
+      <div class="content">
+        <h3 class="title">游戏结束</h3>
+        <p class="score-info">
+          {{ score > highScore ? "新纪录" : "本次得分" }}: {{ score }}
+        </p>
+
+        <div class="restart-btn" @click="reStart">再来一局</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits, reactive, onMounted, onBeforeUnmount } from "vue";
+import { ref, defineEmits, reactive, onMounted, onBeforeUnmount, computed } from "vue";
+import { useStore } from "vuex";
+import { key } from "@/store";
 // util
 import { createGameStatus, createFallElement } from "./utils/gameUtils";
 
@@ -68,7 +90,13 @@ const emit = defineEmits<{
   (e: "scoreChange", value: number): void;
 }>();
 
+const store = useStore(key);
+
+const highScore = computed(() => store.state.game.highScore);
+
 const score = ref(0);
+
+const isGameOver = ref(false);
 
 // 测试下落逻辑
 const testDown = ref(false);
@@ -143,6 +171,27 @@ const renderFallEl = () => {
 
 renderFallEl();
 
+const reStart = () => {
+  if (score.value > highScore.value) {
+    store.commit('game/setHighScore', score.value);
+  }
+  score.value = 0;
+  gameStatus.value = createGameStatus(rowCount.value, colCount.value);
+
+  fallEl.value = createFallElement();
+  fallElBeforePoint.value = fallEl.value.getCurrentPosition();
+  nextFallEl.value = createFallElement();
+
+  isGameOver.value = false;
+
+  renderFallEl();
+
+  // 开始下落
+  if (!testDown.value) {
+    setTimeout(handlerFallMoment, fallInterval.value);
+  }
+};
+
 // 下落元素已经到底
 const handlerFallDone = () => {
   // 将上次下落元素最后位置状态置为1
@@ -156,6 +205,7 @@ const handlerFallDone = () => {
 
 // 检查是否有消除的行
 const checkRowClear = () => {
+  // 消除的行数
   let clearRowCount = 0;
 
   for (let i = 0; i < gameStatus.value.length; i++) {
@@ -173,13 +223,16 @@ const checkRowClear = () => {
       clearRowCount++;
     }
   }
-
-  // console.log(`此次共消除了${clearRowCount}行`);
+  
   const newScore = score.value + (clearRowCount === 4 ? 50 : clearRowCount * 10);
 
   score.value = newScore;
 
   emit("scoreChange", newScore);
+};
+
+const handlerGameOver = () => {
+  isGameOver.value = true;
 };
 
 // 每次下落时触发
@@ -205,7 +258,8 @@ const handlerFallMoment = () => {
         setTimeout(handlerFallMoment, fallInterval.value);
       }
     } else {
-      console.log("游戏结束！");
+      // 游戏结束
+      handlerGameOver();
     }
   } else {
     /** 可以下落 */
@@ -288,7 +342,7 @@ const handlerToBottom = () => {
 
   // 显示最新的位置
   renderFallEl();
-}
+};
 
 // 手势操作
 const isTouch = ref(false);
@@ -356,16 +410,16 @@ const handlerTouchEnd = (e: TouchEvent) => {
 
 const keyDownHandler = (e: KeyboardEvent) => {
   switch (e.key) {
-    case 'ArrowUp':
+    case "ArrowUp":
       handlerRotate();
-      break
-    case 'ArrowLeft':
+      break;
+    case "ArrowLeft":
       handlerToLeft();
       break;
-    case 'ArrowRight':
+    case "ArrowRight":
       handlerToRight();
-      break
-    case 'ArrowDown':
+      break;
+    case "ArrowDown":
       handlerToBottom();
   }
 };
@@ -458,6 +512,39 @@ onBeforeUnmount(() => {
       align-items: center;
       .icon-font {
         font-size: 36px;
+      }
+    }
+  }
+
+  .game-over-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.3);
+
+    .content {
+      text-align: center;
+      width: 300px;
+      height: 280px;
+      background: #fff;
+
+      .title {
+        font-size: 32px;
+      }
+
+      .score-info {
+        font-size: 18px;
+      }
+
+      .restart-btn {
+        margin-top: 56px;
+        font-size: 24px;
       }
     }
   }
